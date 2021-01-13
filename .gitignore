@@ -1,0 +1,3 @@
+/weatherapp/util/config.yml
+# Project exclude paths
+/venv/
