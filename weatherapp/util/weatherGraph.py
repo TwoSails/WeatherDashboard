@@ -3,7 +3,8 @@ import datetime
 import os
 
 from plotly.offline import plot
-from plotly.graph_objs import Scatter
+from plotly.graph_objs import Scatter, Bar
+import plotly.graph_objects as go
 
 
 class WeatherGraph:
@@ -62,7 +63,7 @@ class WeatherGraph:
         TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataRainfall[1]["TIMESTAMPS"][::-1]]
         rainfall = self.dataRainfall[0]["rainfall"][::-1]
 
-        rainfall_graph = plot([Scatter(x=TIMESTAMPS, y=rainfall, mode="lines", name="Rainfall")],
+        rainfall_graph = plot([Bar(x=TIMESTAMPS, y=rainfall, name="Rainfall")],
                               output_type="div",
                               include_plotlyjs=False, show_link=False, link_text="")
 
