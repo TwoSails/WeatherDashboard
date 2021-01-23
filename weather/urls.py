@@ -20,3 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('weatherapp.urls'))
 ]
+
+handler404 = "weatherapp.views.handler404"
+handler500 = "weatherapp.views.handler500"

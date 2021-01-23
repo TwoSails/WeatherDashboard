@@ -6,5 +6,5 @@ urlpatterns = [
     path('', views.index),
     path("dashboard/", cache_page(300)(views.dashboard), name='dashboard'),
     path(r'dashboard/direction/', views.windDirection, name="windDirection"),
-    path(r'dashboard/info', views.infoPage, name="info",)
+    path(r'dashboard/info', views.infoPage, name="info", ),
 ]
