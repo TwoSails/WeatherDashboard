@@ -75,3 +75,7 @@ def dashboard(request):
 def windDirection(request):
     """unsupported"""
     return render(request, "weatherapp/direction.html")
+
+
+def infoPage(request):
+    return render(request, "weatherapp/info.html")
