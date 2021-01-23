@@ -1,6 +1,7 @@
 {% load static %}
 {% load math_extras %}
 {% load wind_extra %}
+{% load plotly_dash %}
 
 <!DOCTYPE html>
 <div lang="en">
@@ -178,12 +179,6 @@
             </div>
           </div>
 
-          <div class="row">
-              <div class="col-xl-12 col-lg-auto mb-4">
-                  <p>This is information</p>
-              </div>
-          </div>
-
           <!-- windDirection Chart -->
             <div class="row" id="windDirection-chart-area">
                 <div class="col-xl-12 col-lg-auto mb-4">
@@ -191,12 +186,9 @@
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Wind Direction</h6>
                 </div>
-                    <!-- Card Body -->
-                    <div class="card-body">
-                          {% autoescape off %}
-                            {{ graphs.windDirection }}
-                          {% endautoescape %}
-                    </div>
+                      <div class="card-body" style="">
+                          {% plotly_app_bootstrap name="windDirection" aspect="21by9"%}
+                      </div>
                   </div>
                 </div>
               </div>

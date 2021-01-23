@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'weatherapp',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig'
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
