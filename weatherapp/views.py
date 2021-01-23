@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
 from weatherapp.util.weather import Weather
@@ -79,3 +80,12 @@ def windDirection(request):
 
 def infoPage(request):
     return render(request, "weatherapp/info.html")
+
+
+def handler404(request, exception):
+    return render(request, '404.html')
+
+
+def handler500(request):
+    data = {}
+    return render(request, '500.html', data)
