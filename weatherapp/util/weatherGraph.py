@@ -4,6 +4,7 @@ import os
 
 from plotly.offline import plot
 from plotly.graph_objs import Scatter, Bar, Scatterpolar
+from plotly.graph_objects import Figure
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -46,12 +47,7 @@ class WeatherGraph:
         self.dataWind = self.dataWind.json()
 
     def wind_direction_graph(self):
-        TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1]]
         windDirection = self.dataWind[1]["direction"][::-1]
-
-        windDirectionGraph = plot([Scatterpolar(r=self.dataWind[0]["speed"][::-1], theta=windDirection, mode='markers',
-                                                hovertext=["True", "False"], text=["Speed", "Wind Direction"])],
-                                  output_type="div", include_plotlyjs=False, show_link=False, link_text="")
 
         fig = make_subplots(rows=1, cols=2, specs=[[{'type': 'polar'}, {'type': 'polar'}]])
 
@@ -63,8 +59,6 @@ class WeatherGraph:
                                    marker=dict(color='lightblue', size=8, symbol='square')), 1, 1)
         fig.add_trace(Scatterpolar(mode="markers", r=rGust, theta=theta,
                                    marker=dict(color='lightblue', size=8, symbol='square')), 1, 2)
-
-        #  fig.update_traces(r=r, theta=theta, mode="markers", marker=dict(color='lightslategray', size=8, symbol='square'))
 
         fig.update_layout(
             title="Wind Gust/Wind Average Speed in Wind Direction",
@@ -86,31 +80,34 @@ class WeatherGraph:
                 ),
             ))
 
-        app = DjangoDash("windDirection")
-        app.layout = html.Div([dcc.Graph(figure=fig)])
+        windDirectionApp = DjangoDash("windDirection")
+        windDirectionApp.layout = html.Div([dcc.Graph(figure=fig)])
 
-        # windDirectionGraph = plot([fig], output_type="div", include_plotlyjs=False)
         return None
 
     def wind_speed_graph(self):
         TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1]]
         windSpeed = self.dataWind[0]["speed"][::-1]
 
-        wind_speed_graph = plot([Scatter(x=TIMESTAMPS, y=windSpeed, mode="lines", name="Wind Speed")],
-                                output_type="div",
-                                include_plotlyjs=False, show_link=False, link_text="")
+        fig = Figure(data=Scatter(x=TIMESTAMPS, y=windSpeed, mode="lines+markers", name="Wind Speed"))
+        fig.update_layout(showlegend=False)
 
-        return wind_speed_graph
+        windSpeedApp = DjangoDash("windSpeed")
+        windSpeedApp.layout = html.Div([dcc.Graph(figure=fig)])
+
+        return None
 
     def wind_gust_graph(self):
         TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1]]
         windGust = self.dataWind[2]["gust"][::-1]
 
-        wind_gust_graph = plot([Scatter(x=TIMESTAMPS, y=windGust, mode="lines", name="Wind Gust")],
-                               output_type="div",
-                               include_plotlyjs=False, show_link=False, link_text="")
+        fig = Figure(data=Scatter(x=TIMESTAMPS, y=windGust, mode="lines+markers", name="Wind Gust"))
+        fig.update_layout(showlegend=False)
 
-        return wind_gust_graph
+        windGustApp = DjangoDash("windGust")
+        windGustApp.layout = html.Div([dcc.Graph(figure=fig)])
+
+        return None
 
     def rainfall_graph(self, days):
         params = {"span": int(days * 48)}
@@ -119,11 +116,13 @@ class WeatherGraph:
         TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataRainfall[1]["TIMESTAMPS"][::-1]]
         rainfall = self.dataRainfall[0]["rainfall"][::-1]
 
-        rainfall_graph = plot([Bar(x=TIMESTAMPS, y=rainfall, name="Rainfall")],
-                              output_type="div",
-                              include_plotlyjs=False, show_link=False, link_text="")
+        fig = Figure(data=Bar(x=TIMESTAMPS, y=rainfall, name="Rainfall"))
+        fig.update_layout(showlegend=False)
 
-        return rainfall_graph
+        rainfallApp = DjangoDash("rainfall")
+        rainfallApp.layout = html.Div([dcc.Graph(figure=fig)])
+
+        return None
 
     def humidity_graph(self, days):
         params = {"span": int(days * 48)}
@@ -132,11 +131,13 @@ class WeatherGraph:
         TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataHumidity[1]["TIMESTAMPS"][::-1]]
         humidity = self.dataHumidity[0]["humidity"][::-1]
 
-        humidity_graph = plot([Scatter(x=TIMESTAMPS, y=humidity, mode="lines", name="Humidity")],
-                              output_type="div",
-                              include_plotlyjs=False, show_link=False, link_text="")
+        fig = Figure(data=Scatter(x=TIMESTAMPS, y=humidity, mode="lines+markers", name="Humidity"))
+        fig.update_layout(showlegend=False)
 
-        return humidity_graph
+        humidityApp = DjangoDash("humidity")
+        humidityApp.layout = html.Div([dcc.Graph(figure=fig)])
+
+        return None
 
     def ambient_temp_graph(self, days):
         params = {"span": int(days * 48)}
@@ -145,8 +146,10 @@ class WeatherGraph:
         TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataAmbientTemp[1]["TIMESTAMPS"][::-1]]
         ambientTemp = self.dataAmbientTemp[0]["ambientTemp"][::-1]
 
-        ambient_graph = plot([Scatter(x=TIMESTAMPS, y=ambientTemp, mode="lines", name="Ambient Temp")],
-                             output_type="div",
-                             include_plotlyjs=False, show_link=False, link_text="")
+        fig = Figure(data=Scatter(x=TIMESTAMPS, y=ambientTemp, mode="lines+markers", name="Ambient Temperature"))
+        fig.update_layout(showlegend=False)
 
-        return ambient_graph
+        ambientTempApp = DjangoDash("ambientTemp")
+        ambientTempApp.layout = html.Div([dcc.Graph(figure=fig)])
+
+        return None

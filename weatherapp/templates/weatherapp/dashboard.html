@@ -201,9 +201,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                      {% autoescape off %}
-                        {{ graphs.avgWindSpeed }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="windSpeed" aspect="21by9" %}
                 </div>
               </div>
             </div>
@@ -217,9 +215,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                      {% autoescape off %}
-                        {{ graphs.windGust }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="windGust" aspect="21by9" %}
                 </div>
               </div>
             </div>
@@ -233,9 +229,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                      {% autoescape off %}
-                        {{ graphs.rainfall }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="rainfall" aspect="21by9" %}
                 </div>
               </div>
             </div>
@@ -249,9 +243,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                      {% autoescape off %}
-                        {{ graphs.humidity }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="humidity" aspect="21by9" %}
                 </div>
               </div>
             </div>
@@ -266,9 +258,7 @@
                 <!-- Card Body -->
                 <div class="card-body">
 
-                      {% autoescape off %}
-                        {{ graphs.ambient }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="ambientTemp" aspect="21by9" %}
                 </div>
               </div>
             </div>
