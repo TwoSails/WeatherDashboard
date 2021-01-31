@@ -5,7 +5,6 @@ from django.views.decorators.cache import cache_page
 from weatherapp.util.weather import Weather
 from weatherapp.util.weatherGraph import WeatherGraph
 from weatherapp.util.config import get_config
-from weatherapp.util.components import Components
 
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
@@ -35,7 +34,6 @@ def dashboard(request):
     global config
     w = Weather(config=config, page="dashboard")
     wg = WeatherGraph(config=config, page="dashboard")
-    co = Components()
 
     wg.wind_data()
 
@@ -49,8 +47,6 @@ def dashboard(request):
     windData = w.get_wind()
     ambientData = w.get_ambient_temp()[0]["ambientTemp"]
     humidityData = w.get_humidity()[0]["humidity"]
-
-    co.ambientTempSlider()
 
     weather = {"windDirection": "North",
                "windSpeed": "50mph",

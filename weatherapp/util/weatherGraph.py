@@ -253,7 +253,7 @@ class WeatherGraph:
                                               value=7,
                                               step=1,
                                               updatemode='mouseup'
-                                          )])
+                                          ), ])
 
         @ambientTempApp.callback(Output('tempGraph', 'figure'), [Input('tempSlider', 'value')])
         def update_figure(value):
