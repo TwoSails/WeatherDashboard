@@ -1,6 +1,7 @@
 import requests
 import datetime
 import os
+import time
 
 from plotly.offline import plot
 from plotly.graph_objs import Scatter, Bar, Scatterpolar
@@ -119,20 +120,18 @@ class WeatherGraph:
                                             value=7,
                                             step=1,
                                             updatemode='mouseup'
-                                        )])
+                                        ), html.P(id='windSpeedOutput')])
 
-        @windSpeedApp.callback(Output('windSpeedApp', 'figure'), [Input('windSpeedSlider', 'value')])
+        @windSpeedApp.callback([Output('windSpeedApp', 'figure'), Output('windSpeedOutput', 'children')], [Input('windSpeedSlider', 'value')])
         def update_figure(value):
             value *= 48
             TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1][:value]]
-            windSpeed = self.dataWind[0]["speed"][::-1][:value]
-
-            print(windSpeed)
+            windSpeed = self.dataWind[0]["gust"][::-1][:value]
 
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=windSpeed, mode="lines+markers", name="Wind Speed"))
             fig.update_layout(showlegend=False, transition_duration=250)
 
-            return fig
+            return fig, f"Displaying data from {str(TIMESTAMPS[-1]).split('.')[0].replace('-', '/').replace(' ', '-')} to {str(TIMESTAMPS[0]).split('.')[0].replace('-', '/').replace(' ', '-')}"
         return None
 
     def wind_gust_graph(self):
@@ -150,9 +149,9 @@ class WeatherGraph:
                 value=7,
                 step=1,
                 updatemode='mouseup'
-            )])
+            ), html.P(id='windGustOutput')])
 
-        @windGustApp.callback(Output('windGustGraph', 'figure'), [Input('windGustSlider', 'value')])
+        @windGustApp.callback([Output('windGustGraph', 'figure'), Output('windGustOutput', 'children')], [Input('windGustSlider', 'value')])
         def update_figure(value):
             value *= 48
             TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1][:value]]
@@ -161,7 +160,7 @@ class WeatherGraph:
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=windGust, mode="lines+markers", name="Wind Gust"))
             fig.update_layout(showlegend=False, transition_duration=250)
 
-            return fig
+            return fig, f"Displaying data from {str(TIMESTAMPS[-1]).split('.')[0].replace('-', '/').replace(' ', '-')} to {str(TIMESTAMPS[0]).split('.')[0].replace('-', '/').replace(' ', '-')}"
         return None
 
     def rainfall_graph(self):
@@ -184,9 +183,9 @@ class WeatherGraph:
             value=7,
             step=1,
             updatemode='mouseup'
-        )])
+        ), html.P(id='rainfallOutput')])
 
-        @rainfallApp.callback(Output('rainfallGraph', 'figure'), [Input('rainfallSlider', 'value')])
+        @rainfallApp.callback([Output('rainfallGraph', 'figure'), Output('rainfallOutput', 'children')], [Input('rainfallSlider', 'value')])
         def update_figure(value):
             value *= 48
 
@@ -196,7 +195,7 @@ class WeatherGraph:
             fig = Figure(data=Bar(x=TIMESTAMPS, y=rainfall, name="Rainfall"))
             fig.update_layout(showlegend=False, transition_duration=250)
 
-            return fig
+            return fig, f"Displaying data from {str(TIMESTAMPS[-1]).split('.')[0].replace('-', '/').replace(' ', '-')} to {str(TIMESTAMPS[0]).split('.')[0].replace('-', '/').replace(' ', '-')}"
         return None
 
     def humidity_graph(self):
@@ -219,9 +218,9 @@ class WeatherGraph:
                                            value=7,
                                            step=1,
                                            updatemode='mouseup'
-                                       )])
+                                       ), html.P(id='humidityOutput')])
 
-        @humidityApp.callback(Output('humidityGraph', 'figure'), [Input('humiditySlider', 'value')])
+        @humidityApp.callback([Output('humidityGraph', 'figure'), Output('humidityOutput', 'children')], [Input('humiditySlider', 'value')])
         def update_figure(value):
             value *= 48
             TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataHumidity[1]["TIMESTAMPS"][::-1][:value]]
@@ -230,7 +229,7 @@ class WeatherGraph:
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=humidity, mode="lines+markers", name="Humidity"))
             fig.update_layout(showlegend=False, transition_duration=250)
 
-            return fig
+            return fig, f"Displaying data from {str(TIMESTAMPS[-1]).split('.')[0].replace('-', '/').replace(' ', '-')} to {str(TIMESTAMPS[0]).split('.')[0].replace('-', '/').replace(' ', '-')}"
         return None
 
     def ambient_temp_graph(self):
@@ -253,9 +252,9 @@ class WeatherGraph:
                                               value=7,
                                               step=1,
                                               updatemode='mouseup'
-                                          ), ])
+                                          ), html.P(id='ambientOutput')])
 
-        @ambientTempApp.callback(Output('tempGraph', 'figure'), [Input('tempSlider', 'value')])
+        @ambientTempApp.callback([Output('tempGraph', 'figure'), Output('ambientOutput', 'children')], [Input('tempSlider', 'value')])
         def update_figure(value):
             value *= 48
             TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in
@@ -265,5 +264,5 @@ class WeatherGraph:
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=ambientTemp, mode="lines+markers", name="Ambient Temperature"))
             fig.update_layout(showlegend=False, transition_duration=250)
 
-            return fig
+            return fig, f"Displaying data from {str(TIMESTAMPS[-1]).split('.')[0].replace('-', '/').replace(' ', '-')} to {str(TIMESTAMPS[0]).split('.')[0].replace('-', '/').replace(' ', '-')}"
         return None
