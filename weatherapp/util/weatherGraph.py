@@ -8,11 +8,11 @@ from plotly.graph_objects import Figure
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output
 from plotly.subplots import make_subplots
 
 from django_plotly_dash import DjangoDash
 import plotly.graph_objects as go
-from ..templatetags.wind_extra import wind_direction as windDir
 
 
 class WeatherGraph:
@@ -41,115 +41,229 @@ class WeatherGraph:
         self.url = self.config["settings"]["apiURL"]
         self.urlAddition = "/weather/data"
 
-    def wind_data(self, days):
-        params = {"span": int(days * 48), 'direction': True, 'speed': True, 'gust': True}
+    def wind_data(self):
+        params = {"all": True, 'direction': True, 'speed': True, 'gust': True}
         self.dataWind = requests.get(self.url + self.urlAddition + "/wind", params=params)
         self.dataWind = self.dataWind.json()
 
     def wind_direction_graph(self):
-        windDirection = self.dataWind[1]["direction"][::-1]
-
-        fig = make_subplots(rows=1, cols=2, specs=[[{'type': 'polar'}, {'type': 'polar'}]])
-
-        rSpeed = self.dataWind[0]["speed"][::-1]
-        rGust = self.dataWind[2]["gust"][::-1]
-        theta = windDirection
-
-        fig.add_trace(Scatterpolar(mode="markers", r=rSpeed, theta=theta,
-                                   marker=dict(color='lightblue', size=8, symbol='square')), 1, 1)
-        fig.add_trace(Scatterpolar(mode="markers", r=rGust, theta=theta,
-                                   marker=dict(color='lightblue', size=8, symbol='square')), 1, 2)
-
-        fig.update_layout(
-            title="Wind Gust/Wind Average Speed in Wind Direction",
-            showlegend=False,
-            polar=dict(
-                radialaxis_tickfont_size=8,
-                angularaxis=dict(
-                    tickfont_size=8,
-                    rotation=90,  # start position of angular axis
-                    direction="clockwise"
-                )
-            ),
-            polar2=dict(
-                radialaxis_tickfont_size=8,
-                angularaxis=dict(
-                    tickfont_size=8,
-                    rotation=90,
-                    direction="clockwise"
-                ),
-            ))
-
         windDirectionApp = DjangoDash("windDirection")
-        windDirectionApp.layout = html.Div([dcc.Graph(figure=fig)])
+        windDirectionApp.layout = html.Div([dcc.Graph(id="windDirectionGraph"),
+                                            dcc.Slider(
+                                                id="windDirectionSlider",
+                                                marks={1: {'label': '1 Day'},
+                                                       7: {'label': '1 Week'},
+                                                       31: {'label': '1 Month'},
+                                                       62: {'label': '2 Months'},
+                                                       182: {'label': '6 Months'},
+                                                       365: {'label': '1 year'}},
+                                                max=365,
+                                                min=1,
+                                                value=7,
+                                                step=1,
+                                                updatemode='mouseup'
+                                            )
+                                            ])
 
+        @windDirectionApp.callback(Output('windDirectionGraph', 'figure'), [Input('windDirectionSlider', 'value')])
+        def update_figure(value):
+            value *= 48
+            windDirection = self.dataWind[1]["direction"][::-1][:value]
+
+            fig = make_subplots(rows=1, cols=2, specs=[[{'type': 'polar'}, {'type': 'polar'}]])
+
+            rSpeed = self.dataWind[0]["speed"][::-1][:value]
+            rGust = self.dataWind[2]["gust"][::-1][:value]
+            theta = windDirection
+
+            fig.add_trace(Scatterpolar(mode="markers", r=rSpeed, theta=theta,
+                                       marker=dict(color='lightblue', size=8, symbol='square')), 1, 1)
+            fig.add_trace(Scatterpolar(mode="markers", r=rGust, theta=theta,
+                                       marker=dict(color='lightblue', size=8, symbol='square')), 1, 2)
+
+            fig.update_layout(
+                title="Wind Gust/Wind Average Speed in Wind Direction",
+                showlegend=False,
+                polar=dict(
+                    radialaxis_tickfont_size=8,
+                    angularaxis=dict(
+                        tickfont_size=8,
+                        rotation=90,  # start position of angular axis
+                        direction="clockwise"
+                    )
+                ),
+                polar2=dict(
+                    radialaxis_tickfont_size=8,
+                    angularaxis=dict(
+                        tickfont_size=8,
+                        rotation=90,
+                        direction="clockwise"
+                    ),
+                ), transition_duration=250)
+            return fig
         return None
 
     def wind_speed_graph(self):
-        TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1]]
-        windSpeed = self.dataWind[0]["speed"][::-1]
-
-        fig = Figure(data=Scatter(x=TIMESTAMPS, y=windSpeed, mode="lines+markers", name="Wind Speed"))
-        fig.update_layout(showlegend=False)
-
         windSpeedApp = DjangoDash("windSpeed")
-        windSpeedApp.layout = html.Div([dcc.Graph(figure=fig)])
+        windSpeedApp.layout = html.Div([dcc.Graph(id="windSpeedGraph"),
+                                        dcc.Slider(
+                                            id="windSpeedSlider",
+                                            marks={1: {'label': '1 Day'},
+                                                   7: {'label': '1 Week'},
+                                                   31: {'label': '1 Month'},
+                                                   62: {'label': '2 Months'},
+                                                   182: {'label': '6 Months'},
+                                                   365: {'label': '1 year'}},
+                                            max=365,
+                                            min=1,
+                                            value=7,
+                                            step=1,
+                                            updatemode='mouseup'
+                                        )])
 
+        @windSpeedApp.callback(Output('windSpeedApp', 'figure'), [Input('windSpeedSlider', 'value')])
+        def update_figure(value):
+            value *= 48
+            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1][:value]]
+            windSpeed = self.dataWind[0]["speed"][::-1][:value]
+
+            print(windSpeed)
+
+            fig = Figure(data=Scatter(x=TIMESTAMPS, y=windSpeed, mode="lines+markers", name="Wind Speed"))
+            fig.update_layout(showlegend=False, transition_duration=250)
+
+            return fig
         return None
 
     def wind_gust_graph(self):
-        TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1]]
-        windGust = self.dataWind[2]["gust"][::-1]
-
-        fig = Figure(data=Scatter(x=TIMESTAMPS, y=windGust, mode="lines+markers", name="Wind Gust"))
-        fig.update_layout(showlegend=False)
-
         windGustApp = DjangoDash("windGust")
-        windGustApp.layout = html.Div([dcc.Graph(figure=fig)])
+        windGustApp.layout = html.Div([dcc.Graph(id="windGustGraph"), dcc.Slider(
+                id="windGustSlider",
+                marks={1: {'label': '1 Day'},
+                       7: {'label': '1 Week'},
+                       31: {'label': '1 Month'},
+                       62: {'label': '2 Months'},
+                       182: {'label': '6 Months'},
+                       365: {'label': '1 year'}},
+                max=365,
+                min=1,
+                value=7,
+                step=1,
+                updatemode='mouseup'
+            )])
 
+        @windGustApp.callback(Output('windGustGraph', 'figure'), [Input('windGustSlider', 'value')])
+        def update_figure(value):
+            value *= 48
+            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1][:value]]
+            windGust = self.dataWind[2]["gust"][::-1][:value]
+
+            fig = Figure(data=Scatter(x=TIMESTAMPS, y=windGust, mode="lines+markers", name="Wind Gust"))
+            fig.update_layout(showlegend=False, transition_duration=250)
+
+            return fig
         return None
 
-    def rainfall_graph(self, days):
-        params = {"span": int(days * 48)}
+    def rainfall_graph(self):
+        params = {"all": True}
         self.dataRainfall = requests.get(self.url + self.urlAddition + "/rainfall", params=params)
         self.dataRainfall = self.dataRainfall.json()
-        TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataRainfall[1]["TIMESTAMPS"][::-1]]
-        rainfall = self.dataRainfall[0]["rainfall"][::-1]
-
-        fig = Figure(data=Bar(x=TIMESTAMPS, y=rainfall, name="Rainfall"))
-        fig.update_layout(showlegend=False)
 
         rainfallApp = DjangoDash("rainfall")
-        rainfallApp.layout = html.Div([dcc.Graph(figure=fig)])
+        rainfallApp.layout = html.Div([dcc.Graph(id="rainfallGraph"),
+                                       dcc.Slider(
+            id="rainfallSlider",
+            marks={1: {'label': '1 Day'},
+                   7: {'label': '1 Week'},
+                   31: {'label': '1 Month'},
+                   62: {'label': '2 Months'},
+                   182: {'label': '6 Months'},
+                   365: {'label': '1 year'}},
+            max=365,
+            min=1,
+            value=7,
+            step=1,
+            updatemode='mouseup'
+        )])
 
+        @rainfallApp.callback(Output('rainfallGraph', 'figure'), [Input('rainfallSlider', 'value')])
+        def update_figure(value):
+            value *= 48
+
+            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataRainfall[1]["TIMESTAMPS"][::-1][:value]]
+            rainfall = self.dataRainfall[0]["rainfall"][::-1][:value]
+
+            fig = Figure(data=Bar(x=TIMESTAMPS, y=rainfall, name="Rainfall"))
+            fig.update_layout(showlegend=False, transition_duration=250)
+
+            return fig
         return None
 
-    def humidity_graph(self, days):
-        params = {"span": int(days * 48)}
+    def humidity_graph(self):
+        params = {"all": True}
         self.dataHumidity = requests.get(self.url + self.urlAddition + "/humidity", params=params)
         self.dataHumidity = self.dataHumidity.json()
-        TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataHumidity[1]["TIMESTAMPS"][::-1]]
-        humidity = self.dataHumidity[0]["humidity"][::-1]
-
-        fig = Figure(data=Scatter(x=TIMESTAMPS, y=humidity, mode="lines+markers", name="Humidity"))
-        fig.update_layout(showlegend=False)
 
         humidityApp = DjangoDash("humidity")
-        humidityApp.layout = html.Div([dcc.Graph(figure=fig)])
+        humidityApp.layout = html.Div([dcc.Graph(id="humidityGraph"),
+                                       dcc.Slider(
+                                           id="humiditySlider",
+                                           marks={1: {'label': '1 Day'},
+                                                  7: {'label': '1 Week'},
+                                                  31: {'label': '1 Month'},
+                                                  62: {'label': '2 Months'},
+                                                  182: {'label': '6 Months'},
+                                                  365: {'label': '1 year'}},
+                                           max=365,
+                                           min=1,
+                                           value=7,
+                                           step=1,
+                                           updatemode='mouseup'
+                                       )])
 
+        @humidityApp.callback(Output('humidityGraph', 'figure'), [Input('humiditySlider', 'value')])
+        def update_figure(value):
+            value *= 48
+            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataHumidity[1]["TIMESTAMPS"][::-1][:value]]
+            humidity = self.dataHumidity[0]["humidity"][::-1][:value]
+
+            fig = Figure(data=Scatter(x=TIMESTAMPS, y=humidity, mode="lines+markers", name="Humidity"))
+            fig.update_layout(showlegend=False, transition_duration=250)
+
+            return fig
         return None
 
-    def ambient_temp_graph(self, days):
-        params = {"span": int(days * 48)}
+    def ambient_temp_graph(self):
+        params = {"all": True}
         self.dataAmbientTemp = requests.get(self.url + self.urlAddition + "/temp/ambient", params=params)
         self.dataAmbientTemp = self.dataAmbientTemp.json()
-        TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataAmbientTemp[1]["TIMESTAMPS"][::-1]]
-        ambientTemp = self.dataAmbientTemp[0]["ambientTemp"][::-1]
-
-        fig = Figure(data=Scatter(x=TIMESTAMPS, y=ambientTemp, mode="lines+markers", name="Ambient Temperature"))
-        fig.update_layout(showlegend=False)
 
         ambientTempApp = DjangoDash("ambientTemp")
-        ambientTempApp.layout = html.Div([dcc.Graph(figure=fig)])
+        ambientTempApp.layout = html.Div([dcc.Graph(id='tempGraph'),
+                                          dcc.Slider(
+                                              id="tempSlider",
+                                              marks={1: {'label': '1 Day'},
+                                                     7: {'label': '1 Week'},
+                                                     31: {'label': '1 Month'},
+                                                     62: {'label': '2 Months'},
+                                                     182: {'label': '6 Months'},
+                                                     365: {'label': '1 year'}},
+                                              max=365,
+                                              min=1,
+                                              value=7,
+                                              step=1,
+                                              updatemode='mouseup'
+                                          )])
 
+        @ambientTempApp.callback(Output('tempGraph', 'figure'), [Input('tempSlider', 'value')])
+        def update_figure(value):
+            value *= 48
+            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in
+                          self.dataAmbientTemp[1]["TIMESTAMPS"][::-1][:value]]
+            ambientTemp = self.dataAmbientTemp[0]["ambientTemp"][::-1][:value]
+
+            fig = Figure(data=Scatter(x=TIMESTAMPS, y=ambientTemp, mode="lines+markers", name="Ambient Temperature"))
+            fig.update_layout(showlegend=False, transition_duration=250)
+
+            return fig
         return None
