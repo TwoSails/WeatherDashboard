@@ -201,9 +201,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                      {% autoescape off %}
-                        {{ graphs.avgWindSpeed }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="windSpeed" aspect="21by9" %}
                 </div>
               </div>
             </div>
@@ -217,9 +215,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                      {% autoescape off %}
-                        {{ graphs.windGust }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="windGust" aspect="21by9" %}
                 </div>
               </div>
             </div>
@@ -233,9 +229,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                      {% autoescape off %}
-                        {{ graphs.rainfall }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="rainfall" aspect="21by9" %}
                 </div>
               </div>
             </div>
@@ -249,9 +243,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                      {% autoescape off %}
-                        {{ graphs.humidity }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="humidity" aspect="21by9" %}
                 </div>
               </div>
             </div>
@@ -266,9 +258,7 @@
                 <!-- Card Body -->
                 <div class="card-body">
 
-                      {% autoescape off %}
-                        {{ graphs.ambient }}
-                      {% endautoescape %}
+                    {% plotly_app_bootstrap name="ambientTemp" aspect="21by9" %}
                 </div>
               </div>
             </div>
@@ -353,12 +343,40 @@
                 doc.style.display = 'none';
             }
             }
+            
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+
+            const keys = urlParams.keys();
 
             const idList = ['windDirection-chart-area', 'avgWindSpeed-chart-area', 'windGust-chart-area', 'rainfall-chart-area', 'humidity-chart-area'];
-            for (x of idList){
-                const doc = document.getElementById(x);
-                doc.style.display= 'none';
-            }
+            const idListExtra = ['windDirection-chart-area', 'avgWindSpeed-chart-area', 'windGust-chart-area', 'rainfall-chart-area', 'humidity-chart-area', 'ambient-chart-area'];
+
+            const requestParams = {windDir: 'windDirection-chart-area',
+                                    avgWindSpeed: 'avgWindSpeed-chart-area',
+                                    windGust: 'windGust-chart-area',
+                                    rainfall: 'rainfall-chart-area',
+                                    humidity: 'humidity-chart-area'}
+
+            if (keys.length === undefined) {
+                for (x of idList){
+                    const doc = document.getElementById(x);
+                    doc.style.display= 'none';
+                    console.log(x);
+                }
+            } else {
+                for (x of idListExtra){
+                            const doc = document.getElementById(x);
+                            doc.style.display= 'none';
+                            console.log('problem')
+                       }
+                for (const key of keys) {
+                    console.log('loop', key, requestParams[key]);
+                    const doc = document.getElementById(requestParams[key]);
+                    doc.style.display = 'flex';
+
+                    }
+                }
 
         </script>
   <!-- Page level plugins -->

@@ -35,14 +35,14 @@ def dashboard(request):
     w = Weather(config=config, page="dashboard")
     wg = WeatherGraph(config=config, page="dashboard")
 
-    wg.wind_data(7)
+    wg.wind_data()
 
     windDirection_graph = wg.wind_direction_graph()
     windSpeed_graph = wg.wind_speed_graph()
     windGust_graph = wg.wind_gust_graph()
-    rainfall_graph = wg.rainfall_graph(7)
-    humidity_graph = wg.humidity_graph(7)
-    ambient_graph = wg.ambient_temp_graph(7)
+    rainfall_graph = wg.rainfall_graph()
+    humidity_graph = wg.humidity_graph()
+    ambient_graph = wg.ambient_temp_graph()
 
     windData = w.get_wind()
     ambientData = w.get_ambient_temp()[0]["ambientTemp"]
