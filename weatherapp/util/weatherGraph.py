@@ -19,13 +19,17 @@ import plotly.graph_objects as go
 class WeatherGraph:
     def __init__(self, config, page="dashboard"):
         self.config = config[page]
-        self.recent = None
-        self.dataWind = None
+        self.allData = None
+        self.recentSpeed = None
+        self.dataWindSpeedAvg = None
+        self.dataWindDir = None
+        self.dataWindGust = None
         self.dataGroundTemp = None
         self.dataAmbientTemp = None
         self.dataPressure = None
         self.dataHumidity = None
         self.dataRainfall = None
+        self.dataTimestamps = None
 
         self.wind_dirs = {0: "N",
                           45: "NE",
@@ -42,10 +46,20 @@ class WeatherGraph:
         self.url = self.config["settings"]["apiURL"]
         self.urlAddition = "/weather/data"
 
-    def wind_data(self):
-        params = {"all": True, 'direction': True, 'speed': True, 'gust': True}
-        self.dataWind = requests.get(self.url + self.urlAddition + "/wind", params=params)
-        self.dataWind = self.dataWind.json()
+    def data(self):
+        params = {"all": True}
+        self.allData = requests.get(self.url + self.urlAddition + "/all", params=params).json()
+        self.dataTimestamps = self.allData[1]["TIMESTAMPS"]
+        allData = self.allData[0]
+        self.recentSpeed = allData["recentSpeed"]
+        self.dataWindSpeedAvg = allData["windSpeed"]
+        self.dataWindDir = allData["windDirection"]
+        self.dataWindGust = allData["windGust"]
+        self.dataGroundTemp = allData["groundTemp"]
+        self.dataAmbientTemp = allData["ambientTemp"]
+        self.dataPressure = allData["pressure"]
+        self.dataHumidity = allData["humidity"]
+        self.dataRainfall = allData["rainfall"]
 
     def wind_direction_graph(self):
         windDirectionApp = DjangoDash("windDirection")
@@ -69,12 +83,12 @@ class WeatherGraph:
         @windDirectionApp.callback(Output('windDirectionGraph', 'figure'), [Input('windDirectionSlider', 'value')])
         def update_figure(value):
             value *= 48
-            windDirection = self.dataWind[1]["direction"][::-1][:value]
+            windDirection = self.dataWindDir[::-1][:value]
 
             fig = make_subplots(rows=1, cols=2, specs=[[{'type': 'polar'}, {'type': 'polar'}]])
 
-            rSpeed = self.dataWind[0]["speed"][::-1][:value]
-            rGust = self.dataWind[2]["gust"][::-1][:value]
+            rSpeed = self.dataWindSpeedAvg[::-1][:value]
+            rGust = self.dataWindGust[::-1][:value]
             theta = windDirection
 
             fig.add_trace(Scatterpolar(mode="markers", r=rSpeed, theta=theta,
@@ -125,8 +139,8 @@ class WeatherGraph:
         @windSpeedApp.callback([Output('windSpeedApp', 'figure'), Output('windSpeedOutput', 'children')], [Input('windSpeedSlider', 'value')])
         def update_figure(value):
             value *= 48
-            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1][:value]]
-            windSpeed = self.dataWind[0]["gust"][::-1][:value]
+            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataTimestamps[::-1][:value]]
+            windSpeed = self.dataWindGust[::-1][:value]
 
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=windSpeed, mode="lines+markers", name="Wind Speed"))
             fig.update_layout(showlegend=False, transition_duration=250)
@@ -154,8 +168,8 @@ class WeatherGraph:
         @windGustApp.callback([Output('windGustGraph', 'figure'), Output('windGustOutput', 'children')], [Input('windGustSlider', 'value')])
         def update_figure(value):
             value *= 48
-            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataWind[3]["TIMESTAMPS"][::-1][:value]]
-            windGust = self.dataWind[2]["gust"][::-1][:value]
+            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataTimestamps[::-1][:value]]
+            windGust = self.dataWindGust[::-1][:value]
 
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=windGust, mode="lines+markers", name="Wind Gust"))
             fig.update_layout(showlegend=False, transition_duration=250)
@@ -164,10 +178,6 @@ class WeatherGraph:
         return None
 
     def rainfall_graph(self):
-        params = {"all": True}
-        self.dataRainfall = requests.get(self.url + self.urlAddition + "/rainfall", params=params)
-        self.dataRainfall = self.dataRainfall.json()
-
         rainfallApp = DjangoDash("rainfall")
         rainfallApp.layout = html.Div([dcc.Graph(id="rainfallGraph"),
                                        dcc.Slider(
@@ -189,8 +199,8 @@ class WeatherGraph:
         def update_figure(value):
             value *= 48
 
-            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataRainfall[1]["TIMESTAMPS"][::-1][:value]]
-            rainfall = self.dataRainfall[0]["rainfall"][::-1][:value]
+            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataTimestamps[::-1][:value]]
+            rainfall = self.dataRainfall[::-1][:value]
 
             fig = Figure(data=Bar(x=TIMESTAMPS, y=rainfall, name="Rainfall"))
             fig.update_layout(showlegend=False, transition_duration=250)
@@ -199,10 +209,6 @@ class WeatherGraph:
         return None
 
     def humidity_graph(self):
-        params = {"all": True}
-        self.dataHumidity = requests.get(self.url + self.urlAddition + "/humidity", params=params)
-        self.dataHumidity = self.dataHumidity.json()
-
         humidityApp = DjangoDash("humidity")
         humidityApp.layout = html.Div([dcc.Graph(id="humidityGraph"),
                                        dcc.Slider(
@@ -223,8 +229,8 @@ class WeatherGraph:
         @humidityApp.callback([Output('humidityGraph', 'figure'), Output('humidityOutput', 'children')], [Input('humiditySlider', 'value')])
         def update_figure(value):
             value *= 48
-            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataHumidity[1]["TIMESTAMPS"][::-1][:value]]
-            humidity = self.dataHumidity[0]["humidity"][::-1][:value]
+            TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataTimestamps[::-1][:value]]
+            humidity = self.dataHumidity[::-1][:value]
 
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=humidity, mode="lines+markers", name="Humidity"))
             fig.update_layout(showlegend=False, transition_duration=250)
@@ -233,10 +239,6 @@ class WeatherGraph:
         return None
 
     def ambient_temp_graph(self):
-        params = {"all": True}
-        self.dataAmbientTemp = requests.get(self.url + self.urlAddition + "/temp/ambient", params=params)
-        self.dataAmbientTemp = self.dataAmbientTemp.json()
-
         ambientTempApp = DjangoDash("ambientTemp")
         ambientTempApp.layout = html.Div([dcc.Graph(id='tempGraph'),
                                           dcc.Slider(
@@ -258,8 +260,8 @@ class WeatherGraph:
         def update_figure(value):
             value *= 48
             TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in
-                          self.dataAmbientTemp[1]["TIMESTAMPS"][::-1][:value]]
-            ambientTemp = self.dataAmbientTemp[0]["ambientTemp"][::-1][:value]
+                          self.dataTimestamps[::-1][:value]]
+            ambientTemp = self.dataAmbientTemp[::-1][:value]
 
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=ambientTemp, mode="lines+markers", name="Ambient Temperature"))
             fig.update_layout(showlegend=False, transition_duration=250)

@@ -35,7 +35,7 @@ def dashboard(request):
     w = Weather(config=config, page="dashboard")
     wg = WeatherGraph(config=config, page="dashboard")
 
-    wg.wind_data()
+    wg.data()
 
     windDirection_graph = wg.wind_direction_graph()
     windSpeed_graph = wg.wind_speed_graph()
