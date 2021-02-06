@@ -136,11 +136,11 @@ class WeatherGraph:
                                             updatemode='mouseup'
                                         ), html.P(id='windSpeedOutput')])
 
-        @windSpeedApp.callback([Output('windSpeedApp', 'figure'), Output('windSpeedOutput', 'children')], [Input('windSpeedSlider', 'value')])
+        @windSpeedApp.callback([Output('windSpeedGraph', 'figure'), Output('windSpeedOutput', 'children')], [Input('windSpeedSlider', 'value')])
         def update_figure(value):
             value *= 48
             TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataTimestamps[::-1][:value]]
-            windSpeed = self.dataWindGust[::-1][:value]
+            windSpeed = self.dataWindSpeedAvg[::-1][:value]
 
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=windSpeed, mode="lines+markers", name="Wind Speed"))
             fig.update_layout(showlegend=False, transition_duration=250)
