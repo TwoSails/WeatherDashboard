@@ -2,13 +2,28 @@ dashboard:
   settings:
     # ----------------------
     # Miscellaneous settings
-    #  ---------------------
-    SECRET_KEY: 'YOUR SECRET KEY'
-    apiURL: API URL
+    # ----------------------
+    SECRET_KEY: 'YOUR SECRET KEY' # Django secret key
     units:
       temp: celsius
       speed: km/h
       rainfall: mm
+    # -------------------------
+    # MongoDB information which
+    # is involved in
+    # gathering data for the
+    # -------------------------
+    mongoDB-string: mongoDB-string
+    mongoDB:
+      windDirection: windAverage
+      recentSpeed: recentSpeed
+      avgWindSpeed: windSpeedAverage
+      windGust: windGust
+      rainfall: rainfall
+      humidity: humidity
+      pressure: pressure
+      ambientTemp: ambientTemp
+      groundTemp: groundTemp
 
   quickLook:
     format:

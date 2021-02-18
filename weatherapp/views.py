@@ -5,6 +5,7 @@ from django.views.decorators.cache import cache_page
 from weatherapp.util.weather import Weather
 from weatherapp.util.weatherGraph import WeatherGraph
 from weatherapp.util.config import get_config
+from weatherapp.util.data import Data
 
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
@@ -32,8 +33,13 @@ cache_page(200)
 
 def dashboard(request):
     global config
-    w = Weather(config=config, page="dashboard")
-    wg = WeatherGraph(config=config, page="dashboard")
+
+    data = Data()
+    data.get_data()
+    data.all_data()
+
+    w = Weather(config=config, page="dashboard", data=data)
+    wg = WeatherGraph(config=config, page="dashboard", data=data)
 
     wg.data()
 
@@ -45,19 +51,17 @@ def dashboard(request):
     ambient_graph = wg.ambient_temp_graph()
 
     windData = w.get_wind()
-    ambientData = w.get_ambient_temp()[0]["ambientTemp"]
-    humidityData = w.get_humidity()[0]["humidity"]
 
     weather = {"windDirection": "North",
                "windSpeed": "50mph",
                "windGust": "100mph",
-               "quickLookWind": {"speed": windData[0], "direction": windData[1], "gust": windData[2],
-                                 "recent": windData[3]},
-               "quickLookGround": w.get_ground_temp()[0],
-               "quickLookAmbient": ambientData[len(ambientData) - 1],
-               "quickLookPressure": w.get_pressure()[0],
-               "quickLookHumidity": humidityData[len(humidityData) - 1],
-               "quickLookRainfall": w.get_rainfall()[0],
+               "quickLookWind": {"speed": windData['speed'][-1], "direction": windData['direction'][-1], "gust": windData['gust'][-1],
+                                 "recent": windData['recent'][-1]},
+               "quickLookGround": w.get_ground_temp()['groundTemp'],
+               "quickLookAmbient": w.get_ambient_temp()['ambientTemp'][-1],
+               "quickLookPressure": w.get_pressure()['pressure'],
+               "quickLookHumidity": w.get_humidity()['humidity'][-1],
+               "quickLookRainfall": w.get_rainfall()['rainfall'][:24],
                }
 
     # graphs = {"rainfall": rainfall_graph}

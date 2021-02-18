@@ -3,3 +3,4 @@ PyYAML~=5.3.1
 requests~=2.25.1
 plotly~=4.14.1
 dash~=1.19.0
+pymongo==3.4.0
