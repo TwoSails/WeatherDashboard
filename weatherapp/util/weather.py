@@ -1,4 +1,3 @@
-import requests
 from functools import lru_cache
 
 
@@ -14,9 +13,6 @@ class Weather:
         self.dataRainfall = None
 
         self.config = config[page]
-
-        self.url = self.config["settings"]["apiURL"]
-        self.urlAddition = "/weather/data"
 
     @lru_cache(maxsize=12)
     def get_wind(self, configEntry=True):
