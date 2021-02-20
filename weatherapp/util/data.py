@@ -2,7 +2,9 @@
 Scripts to get information from the database.
 """
 from pymongo import MongoClient
+
 from weatherapp.util.config import get_config
+from weatherapp.util.units import data_conversion
 
 
 class Data:
@@ -44,6 +46,8 @@ class Data:
             self.data['ambientTemp'].append(x[self.endpoints['ambientTemp']])
             self.data['groundTemp'].append(x[self.endpoints['groundTemp']])
             self.data['TIMESTAMPS'].append(x['TIMESTAMP'])
+
+        self.data = data_conversion(self.data)
 
     def endpoint_data(self):
         pass

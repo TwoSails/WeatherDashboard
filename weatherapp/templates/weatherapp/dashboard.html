@@ -87,57 +87,69 @@
               </div>
             </div>
 
-            <!-- Wind Average Speed Card -->
-            <div class="col-xl-2 col-md-6 mb-4">
-              <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                  <button class="text-btn d-none d-sm-inline-block btn-sm" onclick="toggle_visibility('avgWindSpeed-chart-area')">
-                   <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Avg. Wind Speed <br><span class="duration">({{ config.dashboard.quickLook.periods.avgWindSpeed }} mins ago)</span></div>
+              <!-- Wind Average Speed Card -->
+              <div class="col-xl-2 col-md-6 mb-4">
+                  <div class="card border-left-primary shadow h-100 py-2">
+                      <div class="card-body">
+                          <button class="text-btn d-none d-sm-inline-block btn-sm"
+                                  onclick="toggle_visibility('avgWindSpeed-chart-area')">
+                              <div class="row no-gutters align-items-center">
+                                  <div class="col mr-2">
+                                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Avg. Wind
+                                          Speed <br><span
+                                                  class="duration">({{ config.dashboard.quickLook.periods.avgWindSpeed }} mins ago)</span>
+                                      </div>
 
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookWind.speed arg=1 key="speed"%} km/h</div>
+                                      <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookWind.speed arg=1 key="speed" %} {{ units.speed }}</div>
 
-                    </div>
+                                  </div>
+                              </div>
+                          </button>
+                      </div>
                   </div>
-                  </button>
-                </div>
               </div>
-            </div>
 
-            <!-- Highest Wind gust Card -->
-            <div class="col-xl-2 col-md-6 mb-4">
-              <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                  <button class="text-btn d-none d-sm-inline-block btn-sm" onclick="toggle_visibility('windGust-chart-area')"><div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Wind Gust <br><span class="duration">({{ config.dashboard.quickLook.periods.windGust }} mins ago)</span></div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookWind.gust arg=1 key="gust"%} km/h</div>
-                    </div>
-                  </div></button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Recent Rainfall Card -->
-            <div class="col-xl-2 col-md-6 mb-4">
-              <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                  <button class="text-btn d-none d-sm-inline-block btn-sm" onclick="toggle_visibility('rainfall-chart-area')">
-                      <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Rainfall <br><span class="duration">({{ config.dashboard.quickLook.periods.rainfall }} mins ago)</span></div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookRainfall arg=1 key="rainfall"%} mm</div>
-                    </div>
+              <!-- Highest Wind gust Card -->
+              <div class="col-xl-2 col-md-6 mb-4">
+                  <div class="card border-left-warning shadow h-100 py-2">
+                      <div class="card-body">
+                          <button class="text-btn d-none d-sm-inline-block btn-sm"
+                                  onclick="toggle_visibility('windGust-chart-area')">
+                              <div class="row no-gutters align-items-center">
+                                  <div class="col mr-2">
+                                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Wind Gust
+                                          <br><span class="duration">({{ config.dashboard.quickLook.periods.windGust }} mins ago)</span>
+                                      </div>
+                                      <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookWind.gust arg=1 key="gust" %} {{ units.speed }}</div>
+                                  </div>
+                              </div>
+                          </button>
+                      </div>
                   </div>
-                  </button>
-                </div>
               </div>
-            </div>
 
-          <!-- Humidity Card -->
-            <div class="col-xl-2 col-md-6 mb-4">
-              <div class="card border-left-info shadow h-100 py-2">
+              <!-- Recent Rainfall Card -->
+              <div class="col-xl-2 col-md-6 mb-4">
+                  <div class="card border-left-warning shadow h-100 py-2">
+                      <div class="card-body">
+                          <button class="text-btn d-none d-sm-inline-block btn-sm"
+                                  onclick="toggle_visibility('rainfall-chart-area')">
+                              <div class="row no-gutters align-items-center">
+                                  <div class="col mr-2">
+                                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Rainfall
+                                          <br><span class="duration">({{ config.dashboard.quickLook.periods.rainfall }} mins ago)</span>
+                                      </div>
+                                      <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookRainfall arg=1 key="rainfall" %} {{ units.rainfall }}</div>
+                                  </div>
+                              </div>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Humidity Card -->
+              <div class="col-xl-2 col-md-6 mb-4">
+                  <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                   <button class="text-btn d-none d-sm-inline-block btn-sm" onclick="toggle_visibility('humidity-chart-area')">
                       <div class="row no-gutters align-items-center">
@@ -159,25 +171,29 @@
 
           <!-- Temp Card -->
               <div class="col-xl-2 col-md-6 mb-4">
-              <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                  <button type="button" onclick="toggle_visibility('ambient-chart-area')" class="text-btn d-none d-sm-inline-block btn-sm">
-                      <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Ambient Temp <br><span class="duration">({{ config.dashboard.quickLook.periods.ambientTemp}} mins ago)</span></div>
-                      <div class="row no-gutters align-items-center">
-                        <div class="col-auto">
+                  <div class="card border-left-info shadow h-100 py-2">
+                      <div class="card-body">
+                          <button type="button" onclick="toggle_visibility('ambient-chart-area')"
+                                  class="text-btn d-none d-sm-inline-block btn-sm">
+                              <div class="row no-gutters align-items-center">
+                                  <div class="col mr-2">
+                                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Ambient Temp
+                                          <br><span
+                                                  class="duration">({{ config.dashboard.quickLook.periods.ambientTemp }} mins ago)</span>
+                                      </div>
+                                      <div class="row no-gutters align-items-center">
+                                          <div class="col-auto">
 
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{% round value=weather.quickLookAmbient arg=1 %}&#176;C</div>
+                                              <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{% round value=weather.quickLookAmbient arg=1 %}&#176;{{ units.temp }}</div>
 
-                        </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </button>
                       </div>
-                    </div>
                   </div>
-                  </button>
-                </div>
               </div>
-            </div>
           </div>
 
           <!-- windDirection Chart -->

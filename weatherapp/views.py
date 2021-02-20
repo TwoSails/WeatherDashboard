@@ -1,16 +1,10 @@
 from django.shortcuts import render
-from django.template import RequestContext
 from django.views.decorators.cache import cache_page
 
-from weatherapp.util.weather import Weather
-from weatherapp.util.weatherGraph import WeatherGraph
 from weatherapp.util.config import get_config
 from weatherapp.util.data import Data
-
-from plotly.offline import plot
-from plotly.graph_objs import Scatter
-
-from functools import lru_cache
+from weatherapp.util.weather import Weather
+from weatherapp.util.weatherGraph import WeatherGraph
 
 config = get_config()
 
@@ -72,7 +66,11 @@ def dashboard(request):
               'humidity': humidity_graph,
               'ambient': ambient_graph}
 
-    context = {'weather': weather, 'graphs': graphs, 'config': config}
+    units = {'rainfall': config['dashboard']['settings']['units']['output']['rainfall'],
+             'temp': 'C' if config['dashboard']['settings']['units']['output']['temp'] == 'celsius' else 'F',
+             'speed': config['dashboard']['settings']['units']['output']['speed']}
+
+    context = {'weather': weather, 'graphs': graphs, 'config': config, 'units': units}
 
     return render(request, 'weatherapp/dashboard.html', context)
 

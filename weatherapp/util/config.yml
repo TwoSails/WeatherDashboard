@@ -5,9 +5,14 @@ dashboard:
     # ----------------------
     SECRET_KEY: 'YOUR SECRET KEY' # Django secret key
     units:
-      temp: celsius
-      speed: km/h
-      rainfall: mm
+      output:
+        temp: celsius
+        speed: km/h
+        rainfall: mm
+      recorded-in:
+        temp: celsius
+        speed: km/h
+        rainfall: mm
     # -------------------------
     # MongoDB information which
     # is involved in
@@ -48,4 +53,13 @@ dashboard:
       pressure: 30 # measured in minutes
       ambientTemp: 30 # measured in minutes
       groundTemp: 30 # measured in minutes
+
+  sensors:
+    windDirection: true
+    windSpeed: true
+    rainfall: true
+    humidity: true
+    pressure: true
+    ambientTemp: true
+    groundTemp: false
 
