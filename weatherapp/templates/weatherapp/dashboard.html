@@ -6,25 +6,26 @@
 <!DOCTYPE html>
 <div lang="en">
 
-<head>
+    <head>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-  <title>Weather Dashboard</title>
+        <title>Weather Dashboard {{ location }}</title>
 
-  <!-- Custom fonts for this template-->
-  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <!-- Custom fonts for this template-->
+        <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+              rel="stylesheet">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-  <!-- Custom styles for this template-->
-    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <!-- Custom styles for this template-->
+        <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         .text-btn, a:hover{
             text-decoration: none;
@@ -53,25 +54,26 @@
         { % include "./includes/topbar.html" %}
         End of Topbar -->
 
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
-            <br>
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+              <br>
 
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Download Data</a>
+              <!-- Page Heading -->
+              <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                  <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                  <a href="/dashboard/download" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                          class="fas fa-download fa-sm text-white-50"></i> Download Data</a>
 
-          </div>
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h5>Recent Data</h5>
-            </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                  <h5>Recent Data</h5>
+              </div>
 
 
-          <!-- Content Row -->
-          <div class="row">
+              <!-- Content Row -->
+              <div class="row">
 
-            <!-- Wind Direction Card -->
+                  <!-- Wind Direction Card -->
             <div class="col-xl-2 col-md-6 mb-4">
               <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">

@@ -18,7 +18,7 @@ dashboard:
     # is involved in
     # gathering data for the
     # -------------------------
-    mongoDB-string: mongoDB-string
+    mongoDB-string: raspberryweather.local
     mongoDB:
       windDirection: windAverage
       recentSpeed: recentSpeed
@@ -55,6 +55,11 @@ dashboard:
       groundTemp: 30 # measured in minutes
 
   sensors:
+    # ---------------------
+    # Boolean operators
+    # to show which sensors
+    # are active
+    # ---------------------
     windDirection: true
     windSpeed: true
     rainfall: true

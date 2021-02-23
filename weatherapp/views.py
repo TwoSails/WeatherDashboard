@@ -1,12 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.views.decorators.cache import cache_page
 
 from weatherapp.util.config import get_config
 from weatherapp.util.data import Data
 from weatherapp.util.weather import Weather
 from weatherapp.util.weatherGraph import WeatherGraph
+from .forms import DataForm
+from .models import Data as DataModel
+from .util.export import FileExport
 
 config = get_config()
+
+export_name = None
 
 
 # Create your views here.
@@ -82,6 +87,48 @@ def windDirection(request):
 
 def infoPage(request):
     return render(request, "weatherapp/info.html")
+
+
+def download_page(request):
+    global export_name
+    if request.method == "POST":
+        form = DataForm(request.POST)
+        if form.is_valid():
+            data = Data()
+            data.get_data()
+            data.all_data()
+            post = get_object_or_404(DataModel)
+            post.export_name = form.cleaned_data['export_name']
+            post.span_int = form.cleaned_data['span_int']
+            post.wind_direction = form.cleaned_data['wind_direction']
+            post.avg_wind_speed = form.cleaned_data['avg_wind_speed']
+            post.wind_gust = form.cleaned_data['wind_gust']
+            post.rainfall = form.cleaned_data['rainfall']
+            post.humidity = form.cleaned_data['humidity']
+            post.ambient_temp = form.cleaned_data['ambient_temp']
+            post.ground_temp = form.cleaned_data['ground_temp']
+            post.pressure = form.cleaned_data['pressure']
+            post.timestamps = form.cleaned_data['timestamps']
+            post.save()
+            fileExport = FileExport(data=data, post=post)
+            fileExport.run()
+            export_name = post.export_name
+            # return redirect('download')
+            content = open("weatherapp/data_files/test.json", 'r').read()
+            return redirect('downloadFile')
+    else:
+        form = DataForm()
+    return render(request, 'weatherapp/download.html', {'form': form})
+
+
+def download_file_page(request):
+    global export_name
+    return render(request, 'weatherapp/downloadFile.html', {'export_name': export_name})
+
+
+def file(request):
+    content = open("weatherapp/data_files/export.json", 'r').read()
+    return HttpResponse(content=content, content_type='text/json')
 
 
 def handler404(request, exception):
