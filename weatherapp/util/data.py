@@ -47,13 +47,18 @@ class Data:
             self.data['groundTemp'].append(x[self.endpoints['groundTemp']])
             self.data['TIMESTAMPS'].append(x['TIMESTAMP'])
 
+        correction = [19.90498791339859, 9.370890762840645]
+
+        humidity = [(x - correction[1]) for x in self.data['humidity']]
+        self.data['humidity'] = humidity
+
         self.data = data_conversion(self.data)
 
     def endpoint_data(self):
         pass
 
     def get_data(self):
-        PATH = self.config['settings']['mongoDB-string']
+        PATH = self.config['settings']['mongoDBString']
 
         cluster = MongoClient(PATH, 27017, connect=False)
 

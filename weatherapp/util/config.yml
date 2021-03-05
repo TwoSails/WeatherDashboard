@@ -1,24 +1,16 @@
 dashboard:
   settings:
-    # ----------------------
-    # Miscellaneous settings
-    # ----------------------
-    SECRET_KEY: 'YOUR SECRET KEY' # Django secret key
+    SECRET_KEY: YOUR SECRET KEY
     units:
       output:
+        temp: fahrenheit
+        speed: mph
+        rainfall: inches
+      input:
         temp: celsius
         speed: km/h
         rainfall: mm
-      recorded-in:
-        temp: celsius
-        speed: km/h
-        rainfall: mm
-    # -------------------------
-    # MongoDB information which
-    # is involved in
-    # gathering data for the
-    # -------------------------
-    mongoDB-string: raspberryweather.local
+    mongoDBString: raspberryweather.local
     mongoDB:
       windDirection: windAverage
       recentSpeed: recentSpeed
@@ -29,37 +21,19 @@ dashboard:
       pressure: pressure
       ambientTemp: ambientTemp
       groundTemp: groundTemp
-
   quickLook:
     format:
-      # ------------------------------------
-      # How data is to be presented and formatted
-      # on the page
-      # Recommended values are default
-      # ------------------------------------
-      windDirection: txt # txt = Text Based Info, img = Compass Image Info
-
+      windDirection: txt
     periods:
-      # ------------------------------------
-      # Periods of displaying quicklook data.
-      # All data points are variable.
-      # Recommended values are default.
-      # ------------------------------------
-      windDirection: 30 # measured in minutes
-      avgWindSpeed: 360 # measured in minutes
-      windGust: 720 # measured in minutes
-      rainfall: 720 # measured in minutes
-      humidity: 30 # measured in minutes
-      pressure: 30 # measured in minutes
-      ambientTemp: 30 # measured in minutes
-      groundTemp: 30 # measured in minutes
-
+      windDirection: 30
+      avgWindSpeed: 360
+      windGust: 720
+      rainfall: 720
+      humidity: 30
+      pressure: 30
+      ambientTemp: 30
+      groundTemp: 30
   sensors:
-    # ---------------------
-    # Boolean operators
-    # to show which sensors
-    # are active
-    # ---------------------
     windDirection: true
     windSpeed: true
     rainfall: true
@@ -67,4 +41,3 @@ dashboard:
     pressure: true
     ambientTemp: true
     groundTemp: false
-

@@ -9,7 +9,7 @@ def compare():
     config = configFile
     config = config['settings']['units']
     outputs = config['output']
-    inputs = config['recorded-in']
+    inputs = config['input']
     if outputs['temp'] == inputs['temp']:
         tempSame = True
     else:

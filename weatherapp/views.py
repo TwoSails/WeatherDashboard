@@ -114,7 +114,6 @@ def download_page(request):
             fileExport.run()
             export_name = post.export_name
             # return redirect('download')
-            content = open("weatherapp/data_files/test.json", 'r').read()
             return redirect('downloadFile')
     else:
         form = DataForm()

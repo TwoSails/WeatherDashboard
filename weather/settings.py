@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+
 from weatherapp.util.config import get_config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -30,14 +31,15 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'weatherapp',
-    'django_plotly_dash.apps.DjangoPlotlyDashConfig'
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+    'adminplus'
 ]
 
 MIDDLEWARE = [

@@ -31,4 +31,11 @@ class Data(models.Model):
         pass
 
     def __str__(self):
-        return self.export_name
+        return self.export_name, self.span_int, self.wind_direction, self.avg_wind_speed, self.wind_gust, self.rainfall, \
+               self.humidity, self.ambient_temp, self.ground_temp, self.pressure, self.timestamps
+
+
+class Config(models.Model):
+
+    def __str__(self):
+        pass
