@@ -1,9 +1,9 @@
-import requests
 from functools import lru_cache
 
 
 class Weather:
-    def __init__(self, config=None, page="dashboard"):
+    def __init__(self, config=None, page="dashboard", data=None):
+        self.dataObj = data
         self.recent = None
         self.dataWind = None
         self.dataGroundTemp = None
@@ -14,54 +14,52 @@ class Weather:
 
         self.config = config[page]
 
-        self.url = self.config["settings"]["apiURL"]
-        self.urlAddition = "/weather/data"
-
     @lru_cache(maxsize=12)
     def get_wind(self, configEntry=True):
-        params = {"speed": True, "recent": True, "gust": True, "direction": True}
+        span = int(self.config["quickLook"]["periods"]["windGust"] / 30)
         if configEntry:
-            params["span"] = int(self.config["quickLook"]["periods"]["windGust"] / 30)
-        self.dataWind = requests.get(self.url + "/weather/data/wind", params=params)
-        return self.dataWind.json()
+            return {'recent': self.dataObj.data['recentSpeed'][span:],
+                    'speed': self.dataObj.data['avgWindSpeed'][span:],
+                    'gust': self.dataObj.data['windGust'][span:],
+                    'direction': self.dataObj.data['windDirection'][span:],
+                    'TIMESTAMP': self.dataObj.data['TIMESTAMPS'][span:]}
+        else:
+            return None
 
     @lru_cache(maxsize=12)
     def get_ground_temp(self, configEntry=True):
-        params = {}
         if configEntry:
-            params["span"] = int(self.config["quickLook"]["periods"]["groundTemp"] / 30)
-        self.dataGroundTemp = requests.get(self.url + self.urlAddition + "/temp/ground", params=params)
-        return self.dataGroundTemp.json()
+            span = int(self.config["quickLook"]["periods"]["groundTemp"] / 30)
+            return {'groundTemp': self.dataObj.data['groundTemp'][span:]}
+        else:
+            return None
 
     @lru_cache(maxsize=12)
     def get_ambient_temp(self, configEntry=True):
-        params = {}
         if configEntry:
-            params["span"] = int(self.config["quickLook"]["periods"]["ambientTemp"] / 30)
-        self.dataAmbientTemp = requests.get(self.url + self.urlAddition + "/temp/ambient", params=params)
-        return self.dataAmbientTemp.json()
+            span = int(self.config["quickLook"]["periods"]["ambientTemp"] / 30)
+            return {'ambientTemp': self.dataObj.data['ambientTemp'][span:]}
+        else:
+            return None
 
     @lru_cache(maxsize=12)
     def get_pressure(self, configEntry=True):
-        params = {}
         if configEntry:
-            params["span"] = int(self.config["quickLook"]["periods"]["pressure"] / 30)
-        self.dataPressure = requests.get(self.url + self.urlAddition + "/pressure", params=params)
-        return self.dataPressure.json()
+            span = int(self.config["quickLook"]["periods"]["pressure"] / 30)
+            return {'pressure': self.dataObj.data['pressure'][span:]}
+        else:
+            return None
 
     @lru_cache(maxsize=12)
     def get_humidity(self, configEntry=True):
-        params = {}
         if configEntry:
-            params["span"] = int(self.config["quickLook"]["periods"]["humidity"] / 30)
-        self.dataHumidity = requests.get(self.url + self.urlAddition + "/humidity", params=params)
-        return self.dataHumidity.json()
+            span = int(self.config["quickLook"]["periods"]["humidity"] / 30)
+            return {'humidity': self.dataObj.data['humidity'][span:]}
+        else:
+            return None
 
     @lru_cache(maxsize=12)
     def get_rainfall(self, configEntry=True):
-        params = {}
         if configEntry:
-            params["span"] = int(self.config["quickLook"]["periods"]["rainfall"] / 30)
-        self.dataRainfall = requests.get(self.url + self.urlAddition + "/rainfall", params=params)
-        return self.dataRainfall.json()
-
+            span = int(self.config["quickLook"]["periods"]["rainfall"] / 30)
+            return {'rainfall': self.dataObj.data['rainfall'][-span:]}

@@ -17,6 +17,4 @@ def wind_direction(degree):
 
     degrees = [0, 45, 90, 135, 180, 225, 270, 315, 360]
 
-    degree = degree["direction"][len(degree)-1]
-
     return wind_dirs[min(degrees, key=lambda x:abs(x-degree))]

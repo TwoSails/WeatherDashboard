@@ -1,0 +1,94 @@
+{# weatherapp/admin/settings.html #}
+{% extends 'adminplus/base.html' %}
+
+<title>Settings</title>
+
+{% block content %}
+    <form method="GET">{% csrf_token %}
+        <h1>Weather Dashboard Settings</h1>
+        <p>Current values in brackets.</p>
+        <hr>
+        <h2>Units</h2>
+        <p>Units which are used to output the data to the site:</p>
+        <ul>
+            <li><span>Temp. Output: {{ form.units_output_temp }}</span></li>
+            <li><span>Speed Output: {{ form.units_output_speed }}</span></li>
+            <li><span>Rainfall Output: {{ form.units_output_rainfall }}</span></li>
+        </ul>
+        <p>Units which the data is inputted into the site:</p>
+        <ul>
+            <li><span>Temp. Input: {{ form.units_input_temp }}</span></li>
+            <li><span>Speed Input: {{ form.units_input_speed }}</span></li>
+            <li><span>Rainfall Input: {{ form.units_input_rainfall }}</span></li>
+        </ul>
+        <hr>
+        <h2>MongoDB</h2>
+        <p>MongoDB connection string</p>
+        <ul>
+            <li><span>MongoDB String ({{ config.settings.mongoDBString }}): {{ form.mongoDB_string }}</span></li>
+        </ul>
+        <p>MongoDB key values</p>
+        <ul>
+            <li>
+                <span>Wind Direction ({{ config.settings.mongoDB.windDirection }}): {{ form.mongoDB_wind_direction }}</span>
+            </li>
+            <li><span>Recent Speed ({{ config.settings.mongoDB.recentSpeed }}): {{ form.mongoDB_recent_speed }}</span>
+            </li>
+            <li>
+                <span>Avg. Wind Speed ({{ config.settings.mongoDB.avgWindSpeed }}): {{ form.mongoDB_avg_wind_speed }}</span>
+            </li>
+            <li><span>Wind Gust ({{ config.settings.mongoDB.windGust }}): {{ form.mongoDB_wind_gust }}</span></li>
+            <li><span>Rainfall ({{ config.settings.mongoDB.rainfall }}): {{ form.mongoDB_rainfall }}</span></li>
+            <li><span>Humidity ({{ config.settings.mongoDB.humidity }}: {{ form.mongoDB_humidity }}</span></li>
+            <li><span>Pressure ({{ config.settings.mongoDB.pressure }}): {{ form.mongoDB_pressure }}</span></li>
+            <li><span>Ambient Temp ({{ config.settings.mongoDB.ambientTemp }}): {{ form.mongoDB_ambient_temp }}</span>
+            </li>
+            <li><span>Ground Temp ({{ config.settings.mongoDB.groundTemp }}): {{ form.mongoDB_ground_temp }}</span></li>
+        </ul>
+        <hr>
+        <h2>Quick Look</h2>
+        <p>Duration of values displayed on the weather dashboard. All values are interpreted in minutes</p>
+        <ul>
+            <li>
+                <span>Wind Direction ({{ config.quickLook.periods.windDirection }} mins): {{ form.quickLook_wind_direction }}</span>
+            </li>
+            <li>
+                <span>Avg. Wind Speed ({{ config.quickLook.periods.avgWindSpeed }} mins): {{ form.quickLook_avg_wind_speed }}</span>
+            </li>
+            <li><span>Wind Gust ({{ config.quickLook.periods.windGust }} mins): {{ form.quickLook_wind_gust }}</span>
+            </li>
+            <li><span>Rainfall ({{ config.quickLook.periods.rainfall }} mins): {{ form.quickLook_rainfall }}</span></li>
+            <li><span>Humidity ({{ config.quickLook.periods.humidity }} mins): {{ form.quickLook_humidity }}</span></li>
+            <li><span>Pressure ({{ config.quickLook.periods.pressure }} mins): {{ form.quickLook_pressure }}</span></li>
+            <li>
+                <span>Ambient Temp ({{ config.quickLook.periods.ambientTemp }} mins): {{ form.quickLook_ambient_temp }}</span>
+            </li>
+            <li>
+                <span>Ground Temp ({{ config.quickLook.periods.groundTemp }} mins): {{ form.quickLook_ground_temp }}</span>
+            </li>
+        </ul>
+        <hr>
+        <h2>Sensors</h2>
+        <p>Boolean Values for active sensors</p>
+        <ul>
+            <li><span>Wind Direction ({{ config.sensors.windDirection }}): {{ form.sensors_wind_direction }}</span></li>
+            <li><span>Wind Speed ({{ config.sensors.windSpeed }}): {{ form.sensors_wind_speed }}</span></li>
+            <li><span>Rainfall ({{ config.sensors.rainfall }}): {{ form.sensors_rainfall }}</span></li>
+            <li><span>Humidity ({{ config.sensors.humidity }}): {{ form.sensors_humidity }}</span></li>
+            <li><span>Pressure ({{ config.sensors.pressure }}): {{ form.sensors_pressure }}</span></li>
+            <li><span>Ambient Temp ({{ config.sensors.ambientTemp }}): {{ form.sensors_ambient_temp }}</span></li>
+            <li><span>Ground Temp ({{ config.sensors.groundTemp }}): {{ form.sensors_ground_temp }}</span></li>
+        </ul>
+        <h2>Miscellaneous</h2>
+        <p>Miscellaneous settings for the weather dashboard</p>
+        <p>Django Secret key:</p>
+        <ul>
+            <li><span>Django secret: {{ form.django_secret }}</span></li>
+        </ul>
+        <p>Wind direction quick look format:</p>
+        <ul>
+            <li><span>Format: {{ form.wind_format }}</span></li>
+        </ul>
+        <button type="submit">Save</button>
+    </form>
+{% endblock %}

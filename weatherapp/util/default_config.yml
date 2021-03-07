@@ -1,0 +1,70 @@
+dashboard:
+  settings:
+    # ----------------------
+    # Miscellaneous settings
+    # ----------------------
+    SECRET_KEY: 'YOUR SECRET KEY' # Django secret key
+    units:
+      output:
+        temp: celsius
+        speed: km/h
+        rainfall: mm
+      input:
+        temp: celsius
+        speed: km/h
+        rainfall: mm
+    # -------------------------
+    # MongoDB information which
+    # is involved in
+    # gathering data for the
+    # -------------------------
+    mongoDBString: raspberryweather.local
+    mongoDB:
+      windDirection: windAverage
+      recentSpeed: recentSpeed
+      avgWindSpeed: windSpeedAverage
+      windGust: windGust
+      rainfall: rainfall
+      humidity: humidity
+      pressure: pressure
+      ambientTemp: ambientTemp
+      groundTemp: groundTemp
+
+  quickLook:
+    format:
+      # ------------------------------------
+      # How data is to be presented and formatted
+      # on the page
+      # Recommended values are default
+      # ------------------------------------
+      windDirection: txt # txt = Text Based Info, img = Compass Image Info
+
+    periods:
+      # ------------------------------------
+      # Periods of displaying quicklook data.
+      # All data points are variable.
+      # Recommended values are default.
+      # ------------------------------------
+      windDirection: 30 # measured in minutes
+      avgWindSpeed: 360 # measured in minutes
+      windGust: 720 # measured in minutes
+      rainfall: 720 # measured in minutes
+      humidity: 30 # measured in minutes
+      pressure: 30 # measured in minutes
+      ambientTemp: 30 # measured in minutes
+      groundTemp: 30 # measured in minutes
+
+  sensors:
+    # ---------------------
+    # Boolean operators
+    # to show which sensors
+    # are active
+    # ---------------------
+    windDirection: true
+    windSpeed: true
+    rainfall: true
+    humidity: true
+    pressure: true
+    ambientTemp: true
+    groundTemp: false
+

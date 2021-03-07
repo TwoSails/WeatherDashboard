@@ -13,10 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import copy
+
+from adminplus.sites import AdminSitePlus
 from django.contrib import admin
 from django.urls import path, include
 
+old = admin.site
+admin.site = AdminSitePlus()
+admin.site._registry = copy.copy(old._registry)
+admin.autodiscover()
+
 urlpatterns = [
+    # path('admin/', admin.site.urls),
     path('admin/', admin.site.urls),
     path('', include('weatherapp.urls')),
     path('django_plotly_dash/', include('django_plotly_dash.urls')),

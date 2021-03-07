@@ -1,23 +1,17 @@
-import requests
 import datetime
-import os
-import time
-
-from plotly.offline import plot
 from plotly.graph_objs import Scatter, Bar, Scatterpolar
 from plotly.graph_objects import Figure
-import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from plotly.subplots import make_subplots
 
 from django_plotly_dash import DjangoDash
-import plotly.graph_objects as go
 
 
 class WeatherGraph:
-    def __init__(self, config, page="dashboard"):
+    def __init__(self, config, page="dashboard", data=None):
+        self.dataObj = data
         self.config = config[page]
         self.allData = None
         self.recentSpeed = None
@@ -43,23 +37,18 @@ class WeatherGraph:
 
         self.degrees = [0, 45, 90, 135, 180, 225, 270, 315, 360]
 
-        self.url = self.config["settings"]["apiURL"]
-        self.urlAddition = "/weather/data"
-
     def data(self):
-        params = {"all": True}
-        self.allData = requests.get(self.url + self.urlAddition + "/all", params=params).json()
-        self.dataTimestamps = self.allData[1]["TIMESTAMPS"]
-        allData = self.allData[0]
-        self.recentSpeed = allData["recentSpeed"]
-        self.dataWindSpeedAvg = allData["windSpeed"]
-        self.dataWindDir = allData["windDirection"]
-        self.dataWindGust = allData["windGust"]
-        self.dataGroundTemp = allData["groundTemp"]
-        self.dataAmbientTemp = allData["ambientTemp"]
-        self.dataPressure = allData["pressure"]
-        self.dataHumidity = allData["humidity"]
-        self.dataRainfall = allData["rainfall"]
+        data = self.dataObj
+        self.recentSpeed = data.data['recentSpeed']
+        self.dataWindSpeedAvg = data.data['avgWindSpeed']
+        self.dataWindDir = data.data['windDirection']
+        self.dataWindGust = data.data['windGust']
+        self.dataGroundTemp = data.data['groundTemp']
+        self.dataAmbientTemp = data.data['ambientTemp']
+        self.dataPressure = data.data['pressure']
+        self.dataHumidity = data.data['humidity']
+        self.dataRainfall = data.data['rainfall']
+        self.dataTimestamps = data.data['TIMESTAMPS']
 
     def wind_direction_graph(self):
         windDirectionApp = DjangoDash("windDirection")
@@ -134,13 +123,13 @@ class WeatherGraph:
                                             value=7,
                                             step=1,
                                             updatemode='mouseup'
-                                        ), html.P(id='windSpeedOutput')])
+                                        ), html.P(className="description-text", id='windSpeedOutput', style={"font": "Roboto"})])
 
-        @windSpeedApp.callback([Output('windSpeedApp', 'figure'), Output('windSpeedOutput', 'children')], [Input('windSpeedSlider', 'value')])
+        @windSpeedApp.callback([Output('windSpeedGraph', 'figure'), Output('windSpeedOutput', 'children')], [Input('windSpeedSlider', 'value')])
         def update_figure(value):
             value *= 48
             TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataTimestamps[::-1][:value]]
-            windSpeed = self.dataWindGust[::-1][:value]
+            windSpeed = self.dataWindSpeedAvg[::-1][:value]
 
             fig = Figure(data=Scatter(x=TIMESTAMPS, y=windSpeed, mode="lines+markers", name="Wind Speed"))
             fig.update_layout(showlegend=False, transition_duration=250)
@@ -163,7 +152,7 @@ class WeatherGraph:
                 value=7,
                 step=1,
                 updatemode='mouseup'
-            ), html.P(id='windGustOutput')])
+            ), html.P(className="description-text", id='windGustOutput')])
 
         @windGustApp.callback([Output('windGustGraph', 'figure'), Output('windGustOutput', 'children')], [Input('windGustSlider', 'value')])
         def update_figure(value):
@@ -193,7 +182,7 @@ class WeatherGraph:
             value=7,
             step=1,
             updatemode='mouseup'
-        ), html.P(id='rainfallOutput')])
+        ), html.P(className="description-text", id='rainfallOutput')])
 
         @rainfallApp.callback([Output('rainfallGraph', 'figure'), Output('rainfallOutput', 'children')], [Input('rainfallSlider', 'value')])
         def update_figure(value):
@@ -224,7 +213,7 @@ class WeatherGraph:
                                            value=7,
                                            step=1,
                                            updatemode='mouseup'
-                                       ), html.P(id='humidityOutput')])
+                                       ), html.P(className="description-text", id='humidityOutput')])
 
         @humidityApp.callback([Output('humidityGraph', 'figure'), Output('humidityOutput', 'children')], [Input('humiditySlider', 'value')])
         def update_figure(value):
@@ -254,7 +243,7 @@ class WeatherGraph:
                                               value=7,
                                               step=1,
                                               updatemode='mouseup'
-                                          ), html.P(id='ambientOutput')])
+                                          ), html.P(className="description-text", id='ambientOutput')])
 
         @ambientTempApp.callback([Output('tempGraph', 'figure'), Output('ambientOutput', 'children')], [Input('tempSlider', 'value')])
         def update_figure(value):

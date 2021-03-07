@@ -1,36 +1,43 @@
 dashboard:
   settings:
-    # ----------------------
-    # Miscellaneous settings
-    #  ---------------------
-    SECRET_KEY: 'YOUR SECRET KEY'
-    apiURL: API URL
+    SECRET_KEY: YOUR SECRET KEY
     units:
-      temp: celsius
-      speed: km/h
-      rainfall: mm
-
+      output:
+        temp: fahrenheit
+        speed: mph
+        rainfall: inches
+      input:
+        temp: celsius
+        speed: km/h
+        rainfall: mm
+    mongoDBString: raspberryweather.local
+    mongoDB:
+      windDirection: windAverage
+      recentSpeed: recentSpeed
+      avgWindSpeed: windSpeedAverage
+      windGust: windGust
+      rainfall: rainfall
+      humidity: humidity
+      pressure: pressure
+      ambientTemp: ambientTemp
+      groundTemp: groundTemp
   quickLook:
     format:
-      # ------------------------------------
-      # How data is to be presented and formatted
-      # on the page
-      # Recommended values are default
-      # ------------------------------------
-      windDirection: txt # txt = Text Based Info, img = Compass Image Info
-
+      windDirection: txt
     periods:
-      # ------------------------------------
-      # Periods of displaying quicklook data.
-      # All data points are variable.
-      # Recommended values are default.
-      # ------------------------------------
-      windDirection: 30 # measured in minutes
-      avgWindSpeed: 360 # measured in minutes
-      windGust: 720 # measured in minutes
-      rainfall: 720 # measured in minutes
-      humidity: 30 # measured in minutes
-      pressure: 30 # measured in minutes
-      ambientTemp: 30 # measured in minutes
-      groundTemp: 30 # measured in minutes
-
+      windDirection: 30
+      avgWindSpeed: 360
+      windGust: 720
+      rainfall: 720
+      humidity: 30
+      pressure: 30
+      ambientTemp: 30
+      groundTemp: 30
+  sensors:
+    windDirection: true
+    windSpeed: true
+    rainfall: true
+    humidity: true
+    pressure: true
+    ambientTemp: true
+    groundTemp: false
