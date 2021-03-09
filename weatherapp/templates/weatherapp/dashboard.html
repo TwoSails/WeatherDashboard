@@ -5,9 +5,7 @@
 
 <!DOCTYPE html>
 <div lang="en">
-
     <head>
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -26,22 +24,24 @@
         <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/custom.css' %}">
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <style>
-        .text-btn, a:hover{
-            text-decoration: none;
-        }
-    </style>
+        <style>
+            .text-btn, a:hover {
+                text-decoration: none;
+            }
 
+            .description-text {
+                color: red;
+            }
+        </style>
+    </head>
 
-</head>
+    <body id="page-top">
 
-<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-  <!-- Page Wrapper -->
-  <div id="wrapper">
-
-    <!-- Sidebar -->
-    {% include "./includes/sidebar.html" %}
+        <!-- Sidebar -->
+        {% include "./includes/sidebar.html" %}
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -266,18 +266,18 @@
                 </div>
               </div>
             </div>
-          </div>
-            <!-- ambientTemp Chart -->
-            <div class="row" id="ambient-chart-area">
-            <div class="col-xl-12 col-lg-auto mb-4">
-              <div class="card shadow mb-4">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Ambient Temperature</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
+            </div>
+              <!-- ambientTemp Chart -->
+              <div class="row" id="ambient-chart-area">
+                  <div class="col-xl-12 col-lg-auto mb-4">
+                      <div class="card shadow mb-4">
+                          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                              <h6 class="m-0 font-weight-bold text-primary">Ambient Temperature</h6>
+                          </div>
+                          <!-- Card Body -->
+                          <div class="card-body description-text">
 
-                    {% plotly_app_bootstrap name="ambientTemp" aspect="21by9" %}
+                              {% plotly_app_bootstrap name="ambientTemp" aspect="21by9" %}
                 </div>
               </div>
             </div>

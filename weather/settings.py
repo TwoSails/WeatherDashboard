@@ -55,6 +55,10 @@ MIDDLEWARE = [
     'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
+PLOTLY_COMPONENTS = [
+    'dpd_static_support'
+]
+
 ROOT_URLCONF = 'weather.urls'
 
 TEMPLATES = [
