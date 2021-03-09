@@ -41,9 +41,8 @@ Basic steps on setting up the dashboard for your own LAN
 
 ## Details
 
-For more details about how to use this system and configure settings, go to
-the `docs`  [directory](https://github.com/TwoSails/WeatherDashboard/tree/master/docs) or in
-the [wiki](https://github.com/TwoSails/WeatherDashboard/wiki).
+For more details look at the files in this directory or in the [wiki](https://github.com/TwoSails/WeatherDashboard/wiki)
+.
 
 ## Contributing
 

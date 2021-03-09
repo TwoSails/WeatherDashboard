@@ -1,12 +1,12 @@
 import datetime
-from plotly.graph_objs import Scatter, Bar, Scatterpolar
-from plotly.graph_objects import Figure
+
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-from plotly.subplots import make_subplots
-
 from django_plotly_dash import DjangoDash
+from plotly.graph_objects import Figure
+from plotly.graph_objs import Scatter, Bar, Scatterpolar
+from plotly.subplots import make_subplots
 
 
 class WeatherGraph:
@@ -24,6 +24,7 @@ class WeatherGraph:
         self.dataHumidity = None
         self.dataRainfall = None
         self.dataTimestamps = None
+        self.external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
         self.wind_dirs = {0: "N",
                           45: "NE",
@@ -125,7 +126,9 @@ class WeatherGraph:
                                             updatemode='mouseup'
                                         ), html.P(className="description-text", id='windSpeedOutput', style={"font": "Roboto"})])
 
-        @windSpeedApp.callback([Output('windSpeedGraph', 'figure'), Output('windSpeedOutput', 'children')], [Input('windSpeedSlider', 'value')])
+        @windSpeedApp.callback(
+            [Output('windSpeedGraph', 'figure'), Output('windSpeedOutput', component_property='children')],
+            [Input('windSpeedSlider', 'value')])
         def update_figure(value):
             value *= 48
             TIMESTAMPS = [datetime.datetime.fromtimestamp(x) for x in self.dataTimestamps[::-1][:value]]
