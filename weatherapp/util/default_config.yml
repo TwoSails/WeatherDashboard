@@ -18,7 +18,7 @@ dashboard:
     # is involved in
     # gathering data for the
     # -------------------------
-    mongoDBString: raspberryweather.local
+    mongoDBString: false
     mongoDB:
       windDirection: windAverage
       recentSpeed: recentSpeed

@@ -58,14 +58,37 @@ class Data:
         pass
 
     def get_data(self):
-        PATH = self.config['settings']['mongoDBString']
+        if isinstance(self.config['settings']['mongoDBString'], bool) and self.config['seetings']['mongoDBString'] == False:
+          self.documents = [{'windDirection': 360,
+                     'avgWindSpeed': 24,
+                     'recentSpeed': 12,
+                     'windGust': 30,
+                     'rainfall': 0.6,
+                     'humidity': 78,
+                     'pressure': 1008,
+                     'ambientTemp': 8,
+                     'groundTemp': None,
+                     'TIMESTAMPS': 1620811664},
+                     {'windDirection': 360,
+                     'avgWindSpeed': 24,
+                     'recentSpeed': 12,
+                     'windGust': 30,
+                     'rainfall': 0.6,
+                     'humidity': 78,
+                     'pressure': 1008,
+                     'ambientTemp': 8,
+                     'groundTemp': None,
+                     'TIMESTAMPS': 1620811164}
+                     ]
+        else:
+          PATH = self.config['settings']['mongoDBString']
 
-        cluster = MongoClient(PATH, 27017, connect=False)
+          cluster = MongoClient(PATH, 27017, connect=False)
 
-        db = cluster["weather"]
-        collection = db["weatherCollection"]
-        documents = []
-        for x in collection.find({}):
-            documents.append(x)
+          db = cluster["weather"]
+          collection = db["weatherCollection"]
+          documents = []
+          for x in collection.find({}):
+              documents.append(x)
 
-        self.documents = documents
+          self.documents = documents
