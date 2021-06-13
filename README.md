@@ -1,6 +1,7 @@
 # Weather Dashboard
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com) 
+
 A weather dashboard designed to display information from
 the [Raspberry Pi Weather Station](https://projects.raspberrypi.org/en/projects/build-your-own-weather-station), works
 with a MongoDB database.
