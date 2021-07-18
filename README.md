@@ -14,15 +14,17 @@ If any problems occur, open an issue.
 
 * Python 3 or above
 
+<img src="imgs/screenshot.png" alt="Dashboard Screenshot">
+
 ## Quick Start
 
 Basic steps on setting up the dashboard for your own LAN
 
 1. Clone the repository or download the source code from the latest release. This can be done a few ways as stated
    below:
-	1. Use command line tools to clone the repo, `git clone https://www.github.com/twosails/WeatherDashboard.git`
-	2. Download the file from the `master` branch or other version branches to get specific features. This can be done
-	   by clicking the green `code`  button in the top right corner.
+    1. Use command line tools to clone the repo, `git clone https://www.github.com/twosails/WeatherDashboard.git`
+    2. Download the file from the `master` branch or other version branches to get specific features. This can be done
+       by clicking the green `code`  button in the top right corner.
 	3. Download source code `.zip`  from the latest release.
 2. Navigate into the cloned repo ‘`cd WeatherDashboard`’, and then install the requirements by using the
    command: `python3 -m pip install -r requirements.txt`
