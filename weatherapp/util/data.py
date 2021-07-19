@@ -35,16 +35,26 @@ class Data:
         self.documents = None
 
     def all_data(self):
+        sensors = self.config['dashboard']['sensors']
         for x in self.documents:
-            self.data['windDirection'].append(x[self.endpoints['windDirection']])
-            self.data['avgWindSpeed'].append(x[self.endpoints['avgWindSpeed']])
-            self.data['recentSpeed'].append(x[self.endpoints['recentSpeed']])
-            self.data['windGust'].append(x[self.endpoints['windGust']])
-            self.data['rainfall'].append(x[self.endpoints['rainfall']])
-            self.data['humidity'].append(x[self.endpoints['humidity']])
-            self.data['pressure'].append(x[self.endpoints['pressure']])
-            self.data['ambientTemp'].append(x[self.endpoints['ambientTemp']])
-            self.data['groundTemp'].append(x[self.endpoints['groundTemp']])
+            if sensors['windDirection']:
+                self.data['windDirection'].append(x[self.endpoints['windDirection']])
+            if sensors['avgWindSpeed']:
+                self.data['avgWindSpeed'].append(x[self.endpoints['avgWindSpeed']])
+            if sensors['recentSpeed']:
+                self.data['recentSpeed'].append(x[self.endpoints['recentSpeed']])
+            if sensors['windGust']:
+                self.data['windGust'].append(x[self.endpoints['windGust']])
+            if sensors['rainfall']:
+                self.data['rainfall'].append(x[self.endpoints['rainfall']])
+            if sensors['humidity']:
+                self.data['humidity'].append(x[self.endpoints['humidity']])
+            if sensors['pressure']:
+                self.data['pressure'].append(x[self.endpoints['pressure']])
+            if sensors['ambientTemp']:
+                self.data['ambientTemp'].append(x[self.endpoints['ambientTemp']])
+            if sensors['groundTemp']:
+                self.data['groundTemp'].append(x[self.endpoints['groundTemp']])
             self.data['TIMESTAMPS'].append(x['TIMESTAMP'])
 
         correction = [19.90498791339859, 9.370890762840645]
