@@ -35,7 +35,7 @@ class Data:
         self.documents = None
 
     def all_data(self):
-        sensors = self.config['dashboard']['sensors']
+        sensors = self.config['sensors']
         for x in self.documents:
             if sensors['windDirection']:
                 self.data['windDirection'].append(x[self.endpoints['windDirection']])
