@@ -43,7 +43,7 @@ class Data:
                 self.data['avgWindSpeed'].append(x[self.endpoints['avgWindSpeed']])
             if sensors['windSpeed']:
                 self.data['recentSpeed'].append(x[self.endpoints['recentSpeed']])
-            if sensors['windGust']:
+            if sensors['windSpeed']:
                 self.data['windGust'].append(x[self.endpoints['windGust']])
             if sensors['rainfall']:
                 self.data['rainfall'].append(x[self.endpoints['rainfall']])
