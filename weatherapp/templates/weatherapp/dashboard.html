@@ -50,9 +50,6 @@
       <!-- Main Content -->
       <div id="content">
 
-        <!-- Topbar
-        { % include "./includes/topbar.html" %}
-        End of Topbar -->
 
           <!-- Begin Page Content -->
           <div class="container-fluid">
@@ -74,224 +71,287 @@
               <div class="row">
 
                   <!-- Wind Direction Card -->
-            <div class="col-xl-2 col-md-6 mb-4">
-              <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                  <button type="button" onclick="toggle_visibility('windDirection-chart-area')" class="text-btn d-none d-sm-inline-block btn-sm">
-                      <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Wind Direction <br><span class="duration">({{ config.dashboard.quickLook.periods.windDirection }} mins ago)</span></div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{% dir degree=weather.quickLookWind.direction %} </div>
-                        </div>
-                      </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-              <!-- Wind Average Speed Card -->
-              <div class="col-xl-2 col-md-6 mb-4">
-                  <div class="card border-left-primary shadow h-100 py-2">
-                      <div class="card-body">
-                          <button class="text-btn d-none d-sm-inline-block btn-sm"
-                                  onclick="toggle_visibility('avgWindSpeed-chart-area')">
-                              <div class="row no-gutters align-items-center">
-                                  <div class="col mr-2">
-                                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Avg. Wind
-                                          Speed <br><span
-                                                  class="duration">({{ config.dashboard.quickLook.periods.avgWindSpeed }} mins ago)</span>
-                                      </div>
-
-                                      <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookWind.speed arg=1 key="speed" %} {{ units.speed }}</div>
-
-                                  </div>
-                              </div>
-                          </button>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Highest Wind gust Card -->
-              <div class="col-xl-2 col-md-6 mb-4">
-                  <div class="card border-left-warning shadow h-100 py-2">
-                      <div class="card-body">
-                          <button class="text-btn d-none d-sm-inline-block btn-sm"
-                                  onclick="toggle_visibility('windGust-chart-area')">
-                              <div class="row no-gutters align-items-center">
-                                  <div class="col mr-2">
-                                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Wind Gust
-                                          <br><span class="duration">({{ config.dashboard.quickLook.periods.windGust }} mins ago)</span>
-                                      </div>
-                                      <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookWind.gust arg=1 key="gust" %} {{ units.speed }}</div>
-                                  </div>
-                              </div>
-                          </button>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Recent Rainfall Card -->
-              <div class="col-xl-2 col-md-6 mb-4">
-                  <div class="card border-left-warning shadow h-100 py-2">
-                      <div class="card-body">
-                          <button class="text-btn d-none d-sm-inline-block btn-sm"
-                                  onclick="toggle_visibility('rainfall-chart-area')">
-                              <div class="row no-gutters align-items-center">
-                                  <div class="col mr-2">
-                                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Rainfall
-                                          <br><span class="duration">({{ config.dashboard.quickLook.periods.rainfall }} mins ago)</span>
-                                      </div>
-                                      <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookRainfall arg=1 key="rainfall" %} {{ units.rainfall }}</div>
-                                  </div>
-                              </div>
-                          </button>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Humidity Card -->
-              <div class="col-xl-2 col-md-6 mb-4">
-                  <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                  <button class="text-btn d-none d-sm-inline-block btn-sm" onclick="toggle_visibility('humidity-chart-area')">
-                      <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Humidity <br><span class="duration">({{ config.dashboard.quickLook.periods.humidity }} mins ago)</span></div>
-                      <div class="row no-gutters align-items-center">
-                        <div class="col-auto">
-
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{% round value=weather.quickLookHumidity arg=1 %}%</div>
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          <!-- Temp Card -->
-              <div class="col-xl-2 col-md-6 mb-4">
-                  <div class="card border-left-info shadow h-100 py-2">
-                      <div class="card-body">
-                          <button type="button" onclick="toggle_visibility('ambient-chart-area')"
-                                  class="text-btn d-none d-sm-inline-block btn-sm">
-                              <div class="row no-gutters align-items-center">
-                                  <div class="col mr-2">
-                                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Ambient Temp
-                                          <br><span
-                                                  class="duration">({{ config.dashboard.quickLook.periods.ambientTemp }} mins ago)</span>
-                                      </div>
+                  {% if sensors.windDirection %}
+                      <div class="col-xl-2 col-md-6 mb-4">
+                          <div class="card border-left-info shadow h-100 py-2">
+                              <div class="card-body">
+                                  <button type="button" onclick="toggle_visibility('windDirection-chart-area')"
+                                          class="text-btn d-none d-sm-inline-block btn-sm">
                                       <div class="row no-gutters align-items-center">
-                                          <div class="col-auto">
+                                          <div class="col mr-2">
+                                              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Wind
+                                                  Direction <br><span
+                                                          class="duration">({{ config.dashboard.quickLook.periods.windDirection }} mins ago)</span>
+                                              </div>
+                                              <div class="h5 mb-0 font-weight-bold text-gray-800">{% dir degree=weather.quickLookWind.direction %} </div>
+                                          </div>
+                                      </div>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  {% endif %}
 
-                                              <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{% round value=weather.quickLookAmbient arg=1 %}&#176;{{ units.temp }}</div>
+                  <!-- Wind Average Speed Card -->
+                  {% if sensors.windSpeed %}
+                      <div class="col-xl-2 col-md-6 mb-4">
+                          <div class="card border-left-primary shadow h-100 py-2">
+                              <div class="card-body">
+                                  <button class="text-btn d-none d-sm-inline-block btn-sm"
+                                          onclick="toggle_visibility('avgWindSpeed-chart-area')">
+                                      <div class="row no-gutters align-items-center">
+                                          <div class="col mr-2">
+                                              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                  Avg. Wind
+                                                  Speed <br><span
+                                                      class="duration">({{ config.dashboard.quickLook.periods.avgWindSpeed }} mins ago)</span>
+                                              </div>
+
+                                              <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookWind.speed arg=1 key="speed" %} {{ units.speed }}</div>
 
                                           </div>
                                       </div>
-                                  </div>
+                                  </button>
                               </div>
-                          </button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <!-- windDirection Chart -->
-            <div class="row" id="windDirection-chart-area">
-                <div class="col-xl-12 col-lg-auto mb-4">
-                  <div class="card shadow mb-4">
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Wind Direction</h6>
-                </div>
-                      <div class="card-body" style="">
-                          {% plotly_app_bootstrap name="windDirection" aspect="21by9"%}
-                      </div>
-                  </div>
-                </div>
-              </div>
-            <!-- avgWindSpeed Chart -->
-            <div class="row" id="avgWindSpeed-chart-area">
-            <div class="col-xl-12 col-lg-auto mb-4">
-              <div class="card shadow mb-4">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Average Wind Speed</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    {% plotly_app_bootstrap name="windSpeed" aspect="21by9" %}
-                </div>
-              </div>
-            </div>
-          </div>
-            <!-- windGust Chart -->
-            <div class="row" id="windGust-chart-area">
-            <div class="col-xl-12 col-lg-auto mb-4">
-              <div class="card shadow mb-4">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Wind Gust</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    {% plotly_app_bootstrap name="windGust" aspect="21by9" %}
-                </div>
-              </div>
-            </div>
-          </div>
-            <!-- rainfall Chart -->
-            <div class="row" id="rainfall-chart-area">
-            <div class="col-xl-12 col-lg-auto mb-4">
-              <div class="card shadow mb-4">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Rainfall</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    {% plotly_app_bootstrap name="rainfall" aspect="21by9" %}
-                </div>
-              </div>
-            </div>
-          </div>
-            <!-- humidity Chart -->
-            <div class="row" id="humidity-chart-area">
-            <div class="col-xl-12 col-lg-auto mb-4">
-              <div class="card shadow mb-4">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Humidity</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    {% plotly_app_bootstrap name="humidity" aspect="21by9" %}
-                </div>
-              </div>
-            </div>
-            </div>
-              <!-- ambientTemp Chart -->
-              <div class="row" id="ambient-chart-area">
-                  <div class="col-xl-12 col-lg-auto mb-4">
-                      <div class="card shadow mb-4">
-                          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                              <h6 class="m-0 font-weight-bold text-primary">Ambient Temperature</h6>
                           </div>
-                          <!-- Card Body -->
-                          <div class="card-body description-text">
+                      </div>
+                  {% endif %}
 
-                              {% plotly_app_bootstrap name="ambientTemp" aspect="21by9" %}
-                </div>
-              </div>
-            </div>
-          </div>
+                  <!-- Highest Wind gust Card -->
+                  {% if sensors.windSpeed %}
+                      <div class="col-xl-2 col-md-6 mb-4">
+                          <div class="card border-left-warning shadow h-100 py-2">
+                              <div class="card-body">
+                                  <button class="text-btn d-none d-sm-inline-block btn-sm"
+                                          onclick="toggle_visibility('windGust-chart-area')">
+                                      <div class="row no-gutters align-items-center">
+                                          <div class="col mr-2">
+                                              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                  Wind Gust
+                                                  <br><span
+                                                      class="duration">({{ config.dashboard.quickLook.periods.windGust }} mins ago)</span>
+                                              </div>
+                                              <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookWind.gust arg=1 key="gust" %} {{ units.speed }}</div>
+                                          </div>
+                                      </div>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  {% endif %}
 
-          <!-- Content Row -->
-          <div class="row">
+                  <!-- Recent Rainfall Card -->
+                  {% if sensors.rainfall %}
+                      <div class="col-xl-2 col-md-6 mb-4">
+                          <div class="card border-left-warning shadow h-100 py-2">
+                              <div class="card-body">
+                                  <button class="text-btn d-none d-sm-inline-block btn-sm"
+                                          onclick="toggle_visibility('rainfall-chart-area')">
+                                      <div class="row no-gutters align-items-center">
+                                          <div class="col mr-2">
+                                              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                  Rainfall
+                                                  <br><span
+                                                      class="duration">({{ config.dashboard.quickLook.periods.rainfall }} mins ago)</span>
+                                              </div>
+                                              <div class="h5 mb-0 font-weight-bold text-gray-800">{% round value=weather.quickLookRainfall arg=1 key="rainfall" %} {{ units.rainfall }}</div>
+                                          </div>
+                                      </div>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  {% endif %}
 
-            <!-- Content Column -->
-            <div class="col-lg-6 mb-4">
+                  <!-- Humidity Card -->
+                  {% if sensors.humidity %}
+                      <div class="col-xl-2 col-md-6 mb-4">
+                          <div class="card border-left-info shadow h-100 py-2">
+                              <div class="card-body">
+                                  <button class="text-btn d-none d-sm-inline-block btn-sm"
+                                          onclick="toggle_visibility('humidity-chart-area')">
+                                      <div class="row no-gutters align-items-center">
+                                          <div class="col mr-2">
+                                              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                  Humidity <br><span
+                                                      class="duration">({{ config.dashboard.quickLook.periods.humidity }} mins ago)</span>
+                                              </div>
+                                              <div class="row no-gutters align-items-center">
+                                                  <div class="col-auto">
 
-            <div class="col-lg-6 mb-4">
+                                                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{% round value=weather.quickLookHumidity arg=1 %}%</div>
 
-          </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  {% endif %}
+
+                  <!-- Temp Card -->
+                  {% if sensors.ambientTemp %}
+                      <div class="col-xl-2 col-md-6 mb-4">
+                          <div class="card border-left-info shadow h-100 py-2">
+                              <div class="card-body">
+                                  <button type="button" onclick="toggle_visibility('ambient-chart-area')"
+                                          class="text-btn d-none d-sm-inline-block btn-sm">
+                                      <div class="row no-gutters align-items-center">
+                                          <div class="col mr-2">
+                                              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                  Ambient Temp
+                                                  <br><span
+                                                      class="duration">({{ config.dashboard.quickLook.periods.ambientTemp }} mins ago)</span>
+                                              </div>
+                                              <div class="row no-gutters align-items-center">
+                                                  <div class="col-auto">
+
+                                                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{% round value=weather.quickLookAmbient arg=1 %}&#176;{{ units.temp }}</div>
+
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                      </div>
+                  {% endif %}
+
+              <!-- windDirection Chart -->
+              {% if sensors.windDirection %}
+                  <div class="row" id="windDirection-chart-area">
+                      <div class="col-xl-12 col-lg-auto mb-4">
+                          <div class="card shadow mb-4">
+                              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                  <h6 class="m-0 font-weight-bold text-primary">Wind Direction</h6>
+                              </div>
+                              <div class="card-body" style="">
+                                  {% plotly_app_bootstrap name="windDirection" aspect="21by9" %}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              {% else %}
+                  <div class="row" id="windDirection-chart-area"></div>
+              {% endif %}
+
+              <!-- avgWindSpeed Chart -->
+              {% if sensors.windSpeed %}
+                  <div class="row" id="avgWindSpeed-chart-area">
+                      <div class="col-xl-12 col-lg-auto mb-4">
+                          <div class="card shadow mb-4">
+                              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                  <h6 class="m-0 font-weight-bold text-primary">Average Wind Speed</h6>
+                              </div>
+                              <!-- Card Body -->
+                              <div class="card-body">
+                                  {% plotly_app_bootstrap name="windSpeed" aspect="21by9" %}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              {% else %}
+                  <div class="row" id="avgWindSpeed-chart-uno"></div>
+              {% endif %}
+
+              <!-- windGust Chart -->
+              {% if sensors.windSpeed %}
+                  <div class="row" id="windGust-chart-area">
+                      <div class="col-xl-12 col-lg-auto mb-4">
+                          <div class="card shadow mb-4">
+                              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                  <h6 class="m-0 font-weight-bold text-primary">Wind Gust</h6>
+                              </div>
+                              <!-- Card Body -->
+                              <div class="card-body">
+                                  {% plotly_app_bootstrap name="windGust" aspect="21by9" %}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              {% else %}
+                  <div class="row" id="windGust-chart-area"></div>
+              {% endif %}
+
+              <!-- rainfall Chart -->
+              {% if sensors.rainfall %}
+                  <div class="row" id="rainfall-chart-area">
+                      <div class="col-xl-12 col-lg-auto mb-4">
+                          <div class="card shadow mb-4">
+                              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                  <h6 class="m-0 font-weight-bold text-primary">Rainfall</h6>
+                              </div>
+                              <!-- Card Body -->
+                              <div class="card-body">
+                                  {% plotly_app_bootstrap name="rainfall" aspect="21by9" %}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              {% else %}
+                  <div class="row" id="rainfall-chart-area"></div>
+              {% endif %}
+              <!-- humidity Chart -->
+              {% if sensors.humidity %}
+                  <div class="row" id="humidity-chart-area">
+                      <div class="col-xl-12 col-lg-auto mb-4">
+                          <div class="card shadow mb-4">
+                              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                  <h6 class="m-0 font-weight-bold text-primary">Humidity</h6>
+                              </div>
+                              <!-- Card Body -->
+                              <div class="card-body">
+                                  {% plotly_app_bootstrap name="humidity" aspect="21by9" %}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              {% else %}
+                  <div class="row" id="humidity-chart-area"></div>
+              {% endif %}
+
+              <!-- ambientTemp Chart -->
+              {% if sensors.ambientTemp %}
+                  <div class="row" id="ambient-chart-area">
+                      <div class="col-xl-12 col-lg-auto mb-4">
+                          <div class="card shadow mb-4">
+                              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                  <h6 class="m-0 font-weight-bold text-primary">Ambient Temperature</h6>
+                              </div>
+                              <!-- Card Body -->
+                              <div class="card-body description-text">
+                                  {% plotly_app_bootstrap name="ambientTemp" aspect="21by9" %}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              {% else %}
+                  <div class="row" id="ambient-chart-area">
+                      <div class="col-xl-12 col-lg-auto mb-4">
+                          <div class="card shadow mb-4">
+                              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                              </div>
+                              <!-- Card Body -->
+                              <div class="card-body description-text">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              {% endif %}
+
+              <!-- Content Row -->
+              <div class="row">
+
+                  <!-- Content Column -->
+                  <div class="col-lg-6 mb-4">
+
+                      <div class="col-lg-6 mb-4">
+
+                      </div>
 
 
         </div>

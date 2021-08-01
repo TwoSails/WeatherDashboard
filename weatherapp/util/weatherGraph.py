@@ -51,7 +51,7 @@ class WeatherGraph:
         self.dataRainfall = data.data['rainfall']
         self.dataTimestamps = data.data['TIMESTAMPS']
 
-    def wind_direction_graph(self):
+    def wind_direction_graph(self) -> object:
         windDirectionApp = DjangoDash("windDirection")
         windDirectionApp.layout = html.Div([dcc.Graph(id="windDirectionGraph"),
                                             dcc.Slider(

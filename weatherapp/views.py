@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.views.decorators.cache import cache_page
 
-from weatherapp.util.config import get_config
+from weatherapp.util.config import get_config, Sensors
 from weatherapp.util.data import Data
 from weatherapp.util.weather import Weather
 from weatherapp.util.weatherGraph import WeatherGraph
@@ -33,6 +33,8 @@ cache_page(200)
 def dashboard(request):
     global config
 
+    sensors = Sensors(config["dashboard"]["sensors"])
+
     data = Data()
     data.get_data()
     data.all_data()
@@ -42,25 +44,56 @@ def dashboard(request):
 
     wg.data()
 
-    windDirection_graph = wg.wind_direction_graph()
-    windSpeed_graph = wg.wind_speed_graph()
-    windGust_graph = wg.wind_gust_graph()
-    rainfall_graph = wg.rainfall_graph()
-    humidity_graph = wg.humidity_graph()
-    ambient_graph = wg.ambient_temp_graph()
+    if sensors.windDirection:
+        windDirection_graph = wg.wind_direction_graph()
+    else:
+        windDirection_graph = None
 
-    windData = w.get_wind()
+    if sensors.windSpeed:
+        windSpeed_graph = wg.wind_speed_graph()
+        windGust_graph = wg.wind_gust_graph()
+    else:
+        windSpeed_graph = None
+        windGust_graph = None
+
+    if sensors.rainfall:
+        rainfall_graph = wg.rainfall_graph()
+    else:
+        rainfall_graph = None
+
+    if sensors.humidity:
+        humidity_graph = wg.humidity_graph()
+    else:
+        humidity_graph = None
+
+    if sensors.pressure:
+        pressure_graph = None
+    else:
+        pressure_graph = None
+
+    if sensors.ambientTemp:
+        ambientTemp_graph = wg.ambient_temp_graph()
+    else:
+        ambientTemp_graph = None
+
+    if sensors.groundTemp:
+        groundTemp_graph = None
+    else:
+        groundTemp_graph = None
+
+    windData = w.get_wind(windDirection=sensors.windDirection, windSpeed=sensors.windSpeed)
 
     weather = {"windDirection": "North",
                "windSpeed": "50mph",
                "windGust": "100mph",
-               "quickLookWind": {"speed": windData['speed'][-1], "direction": windData['direction'][-1], "gust": windData['gust'][-1],
+               "quickLookWind": {"speed": windData['speed'][-1], "direction": windData['direction'][-1],
+                                 "gust": windData['gust'][-1],
                                  "recent": windData['recent'][-1]},
-               "quickLookGround": w.get_ground_temp()['groundTemp'],
-               "quickLookAmbient": w.get_ambient_temp()['ambientTemp'][-1],
-               "quickLookPressure": w.get_pressure()['pressure'],
-               "quickLookHumidity": w.get_humidity()['humidity'][-1],
-               "quickLookRainfall": w.get_rainfall()['rainfall'][:24],
+               "quickLookGround": w.get_ground_temp(configEntry=sensors.groundTemp)[-1],
+               "quickLookAmbient": w.get_ambient_temp(configEntry=sensors.ambientTemp)[-1],
+               "quickLookPressure": w.get_pressure(configEntry=sensors.pressure)[-1],
+               "quickLookHumidity": w.get_humidity(configEntry=sensors.humidity)[-1],
+               "quickLookRainfall": w.get_rainfall(configEntry=sensors.rainfall)[:24],
                }
 
     # graphs = {"rainfall": rainfall_graph}
@@ -69,13 +102,17 @@ def dashboard(request):
               'windGust': windGust_graph,
               'rainfall': rainfall_graph,
               'humidity': humidity_graph,
-              'ambient': ambient_graph}
+              'pressure': pressure_graph,
+              'ambient': ambientTemp_graph,
+              'ground': groundTemp_graph}
 
     units = {'rainfall': config['dashboard']['settings']['units']['output']['rainfall'],
              'temp': 'C' if config['dashboard']['settings']['units']['output']['temp'] == 'celsius' else 'F',
              'speed': config['dashboard']['settings']['units']['output']['speed']}
 
-    context = {'weather': weather, 'graphs': graphs, 'config': config, 'units': units}
+    context = {'weather': weather, 'graphs': graphs, 'config': config, 'units': units, 'sensors': sensors.__dict__}
+
+    print(context)
 
     return render(request, 'weatherapp/dashboard.html', context)
 

@@ -15,51 +15,66 @@ class Weather:
         self.config = config[page]
 
     @lru_cache(maxsize=12)
-    def get_wind(self, configEntry=True):
+    def get_wind(self, windDirection: bool = True, windSpeed: bool = True) -> dict:
         span = int(self.config["quickLook"]["periods"]["windGust"] / 30)
-        if configEntry:
-            return {'recent': self.dataObj.data['recentSpeed'][span:],
-                    'speed': self.dataObj.data['avgWindSpeed'][span:],
-                    'gust': self.dataObj.data['windGust'][span:],
-                    'direction': self.dataObj.data['windDirection'][span:],
-                    'TIMESTAMP': self.dataObj.data['TIMESTAMPS'][span:]}
+        returned = {}
+        if windDirection:
+            returned['direction'] = self.dataObj.data["windDirection"][span:]
         else:
-            return None
+            returned['direction'] = [None]
+
+        if windSpeed:
+            returned['recent'] = self.dataObj.data['recentSpeed'][span:]
+            returned['speed'] = self.dataObj.data['avgWindSpeed'][span:]
+            returned['gust'] = self.dataObj.data['windGust'][span:]
+        else:
+            returned['recent'] = [None]
+            returned['speed'] = [None]
+            returned['gust'] = [None]
+
+        if windDirection or windSpeed:
+            returned['TIMESTAMP'] = self.dataObj.data['TIMESTAMPS'][span:]
+        else:
+            returned['TIMESTAMP'] = [None]
+
+        return returned
 
     @lru_cache(maxsize=12)
-    def get_ground_temp(self, configEntry=True):
+    def get_ground_temp(self, configEntry: bool = True) -> list:
         if configEntry:
             span = int(self.config["quickLook"]["periods"]["groundTemp"] / 30)
-            return {'groundTemp': self.dataObj.data['groundTemp'][span:]}
+            return self.dataObj.data['groundTemp'][span:]
         else:
-            return None
+            return [None]
 
     @lru_cache(maxsize=12)
-    def get_ambient_temp(self, configEntry=True):
+    def get_ambient_temp(self, configEntry: bool = True) -> list:
         if configEntry:
             span = int(self.config["quickLook"]["periods"]["ambientTemp"] / 30)
-            return {'ambientTemp': self.dataObj.data['ambientTemp'][span:]}
+            return self.dataObj.data['ambientTemp'][span:]
         else:
-            return None
+            return [None]
 
     @lru_cache(maxsize=12)
-    def get_pressure(self, configEntry=True):
+    def get_pressure(self, configEntry: bool = True) -> list:
         if configEntry:
             span = int(self.config["quickLook"]["periods"]["pressure"] / 30)
-            return {'pressure': self.dataObj.data['pressure'][span:]}
+            return self.dataObj.data['pressure'][span:]
         else:
-            return None
+            return [None]
 
     @lru_cache(maxsize=12)
-    def get_humidity(self, configEntry=True):
+    def get_humidity(self, configEntry: bool = True) -> list:
         if configEntry:
             span = int(self.config["quickLook"]["periods"]["humidity"] / 30)
-            return {'humidity': self.dataObj.data['humidity'][span:]}
+            return self.dataObj.data['humidity'][span:]
         else:
-            return None
+            return [None]
 
     @lru_cache(maxsize=12)
-    def get_rainfall(self, configEntry=True):
+    def get_rainfall(self, configEntry: bool = True) -> list:
         if configEntry:
             span = int(self.config["quickLook"]["periods"]["rainfall"] / 30)
-            return {'rainfall': self.dataObj.data['rainfall'][-span:]}
+            return self.dataObj.data['rainfall'][-span:]
+        else:
+            return [None for x in range(30)]
